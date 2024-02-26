@@ -1,0 +1,109 @@
+Uppgift 2:
+Vilka beroenden är nödvändiga?
+Car har inga onödiga beroenden vad vi kan se.
+CarController borde inte:
+    - skapa en RepairShop för Volvo240
+TimerListener borde inte:
+    - ha usage dependency beroendet till Volvo för det är en kass och ogeneraliserbar lösning för att load bilar
+    - ha usage dependency till resterande bilar, eftersom de alla har samma storlek vad det verkar; hade dom inte haft det så hade det varit mer rimligt
+    - ha usage dependency till bufferedImage, eftersom det hade varit bättre att ha en metod i drawpanel som returnerar storleksinformationen
+        , sedan vidare kan det returneras från carview, tänk "don't speak to strangers"
+    - ha usage dependency till DrawPanel eftersom det är "ett carview objekt" emellan
+CarTransport borde inte ha:
+    - ha usage dependency till Double, utan borde finnas en getX(), getY() i Car till att börja med, dont speak to strangers
+CarView looks good...
+DrawPanel borde inte ha:
+    - beroende till Car, utan dess arraylist borde kunna innehålla alla "game objects" t.ex repairshop
+    - beroende till Volvo240 etc eftersom det hade varit bättre att ha en game object-klass som fungerar som en datastruktur med
+      dels en bil av specifik typ, dels dess picture. Då kan man bara skriva "g.drawImage" etc
+    - borde inte ha bufferedImage, utan borde vara att en setup-klass använder bufferedIma vid instansiering av game object-klassen,
+      och att game object då har attribut av typ bufferedimage
+    - borde inte heller ha en RepairShop och en Volvo240 av anledningarna listade ovan
+    - borde inte ha usage dependency till CarController (dess "cars" är en instans av carcontroller)
+RepairShop looks good...
+Saab95 looks good...
+Scania looks good...
+Truck looks good...
+
+Vilka klasser är beroende av varandra som inte borde vara det?
+Utöver det vi lyft tidigare, så bör inte CarView ha en CarController, och egentligen knappast åt andra hållet heller.
+Nästan aldrig bra att ha beroenden åt bägge håll. Enligt Model-View-Controller så borde det finnas en
+mellanhand mellan CarView och CarController. Vår tanke är att man kan låta CarController lyssna efter input (buttons)
+via sin CarView, på så vis fokuserar man CarViews ansvar till att rita upp sig själv samtidigt som man
+tar bort associationen från CarView till CarController.
+
+
+Finns det starkare beroenden än nödvändigt?
+I många fall som vi redan berört så har klasser attribut (association/komposition) när det hade räckt
+med usage dependency.t.ex
+
+
+Kan ni identifiera några brott mot övriga designprinciper vi pratat om i kursen?
+Composition over inheritence. Överlag används extends ganska frikostigt, och även om det i vår mening inte är direkt
+fel att använda arv såsom vi gjort här, så hade det kunnat göras med komposition vilket är mer good practice.
+Ofta förekommer det usage dependency eller association med subtyper, t.ex RepairShop<Volvo240> osv där man
+istället borde ha beroenden till RepairShop & Car. Detta kan man säga bryter mot Dependency Inversion Principle,
+då man bör bero på abstraktioner snarare än på konkreta implementationer.
+
+Uppgift 3:
+Analysera era klasser med avseende på Separation of Concern (SoC) och Single Responsibility Principle (SRP).
+Vilka ansvarsområden har era klasser?
+
+- CarController gör setup för spelet genom att initera instanser av fordon, verkstäder,
+samt en frame för UI och timer för spel-loopen.
+
+- I den nestade klassen TimerListener inuti CarController sker i nuläget en updatering av bilarnas postition, collision
+detection (vilket inkluderar att hämta drawpanels storlek, spelobjektens bildstorlek och deras position, slutligen anropar
+den drawpanel att uppdatera sig.
+
+- CarView skapar UI med paneler och knappar, samt har metoder som lyssnar efter input och därefter anropar carcontroller
+för att ge upphov till effekter i modellen
+
+- DrawPanel är panelen varpå spelobjekten ritas, Anvarsområden är att skapa sig själv, att läsa in bilder och vid anrop
+måla ut spelobjekten genom att anropa postionen hos spelobjektet och välja bild beroende på spelobjektets klass
+
+- Car är en abstrakt klass som definerar ett gränssnitt för alla motorfordon med hjul. Detta inkluderar attribut som
+antal dörrar, färg, hästkrafter, hastighet, riktning, position mm, samt metoder för att gasa, bromsa, förflyttas och andra
+beteenden.
+
+- Volvo240 är gränssnittet för bilar av modell Volv240. Den har hela gränssnittet från Car och tillför en trimfactor som innebär att den har en egen implementation för
+att beräkna faktorn som ökar/minskar hastigheten i samband med gas/broms
+
+- Saab95 är gränssnittet för bilar av modell Saab95. Den har hela gränssnittet från Car och tillför att den kan ha en turboeffekt av/på, som påverkar hastighetsfaktorn
+
+- Truck är en abstrakt klass med gränssnittet för lastbilar. Den har hela gränssnittet för Car, men även ett beteende i
+att kunna höja/sänka sitt flak.
+
+- Scania är gränssnittet för Scania lastbilar. Det är en truck men flaket har en vinkel.
+
+- CarTransport är gränssnittet för biltransporter. Det är en truck, men flaket kan bara vara uppe eller nere, samt
+kan lasta bilar (alltså subtyper av Car som dock inte är subtyper av Truck). Att den kan lasta bilar definerias
+även genom interfacet "Loadable" som den implementerar
+
+- Repairshop är gränssnittet för bilverkstäder. Den kan lasta bilar så implementerar "Loadable"
+
+Vilka anledningar har de att förändras?
+CarView både skapar UI och lyssnar efter input, men att lyssna efter input kan varit CarControllers uppgift istället.
+På så sätt behöver inte CarView känna till CarController.
+
+DrawPanel har för många ansvarsområden. Den behöver inte läsa in bilderna, den ska bara rita dem.
+Vidare borde den inte ha tillgång till de faktiska objekten som ritas utan endast bilden, x och y av den.
+Ett alternativ kan vara att ha en klass mellan drawpanel och car med endast dessa tre attribut.
+
+
+På vilka klasser skulle ni behöva tillämpa dekomposition för att bättre följa SoC och SRP?
+Funktionell nedbrytning i TimerListener.
+
+Uppgift 4: Refaktoriseringplan
+1. Göra en ArrayList med repairShops i CarController (tar bort has-a till Volvo240).
+2. Lägg till två attribut i carController panelXBorder, panelYBorder så att timerListener inte använder CarView
+3. Lägg till getXPosition(), getYPostition(), getXDirection(), getYDirection() i Car så klasser som anropar
+ Car.getPostion(), Car.getDirection() inte har usage dependency till Point2D.Double
+ 4. Istället för att addActionListener på buttons inuti CarView, kan det ske i CarController/TimerListener genom
+ e.g cc.frame.startButton.addActionListener
+5. Lägg till en klass gameObject som ger x, y och BufferedImage till drawPanel. Den ska ha en privat parent av typ T
+som implementerar ett interface Positoned. Positioned ställer krav att objektet av typ T ska ha getters som ger x- och
+y-positioner. Setupen med intiering av instanser av gameObject sker i carController. Sedan finns MoveableGameObject som
+kan förlytta sig genom att dens parent object implementerar Moveable (alltså har implementation av move(), turnLeft(), turnRight())
+6. Funktionell nedbrytning med statiska hjälpmetoder för "collision detection" och
+ "load on detection" i actionPerformed inom TimerListener
