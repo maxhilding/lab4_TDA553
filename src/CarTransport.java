@@ -47,7 +47,7 @@ public class CarTransport extends Truck implements Loadable<Car>{
                 (car.getPosition().distance(this.getPosition()) < 2)) {
             loadedCars.push(car);
             car.setIsDriveable(false);
-            car.setPosition(this.getPosition().getX(), this.getPosition().getY());
+            car.setPosition(this.getX(), this.getY());
             //car.position = this.position;
             /*
             this commented solution uses aliasing to make the loaded cars follow the truck at all times. Make sure to
@@ -65,7 +65,7 @@ public class CarTransport extends Truck implements Loadable<Car>{
     public Car loadOff(){
         if (!bedIsUp){
             Car releasedCar = loadedCars.pop();
-            releasedCar.setPosition(this.getPosition().getX()-1, this.getPosition().getY()-1);
+            releasedCar.setPosition(this.getX()-1, this.getY()-1);
             releasedCar.setIsDriveable(true);
             return releasedCar;
             //releasedCar.position = new Point2D.Double(this.getPosition().getX(), this.getPosition().getY()-1);
@@ -77,8 +77,8 @@ public class CarTransport extends Truck implements Loadable<Car>{
 
     @Override
     public void move() {
-        double newX = getCurrentSpeed() * getDirection().getX();
-        double newY = getCurrentSpeed() * getDirection().getY();
+        double newX = getCurrentSpeed() * getXDirection();
+        double newY = getCurrentSpeed() * getYDirection();
         this.setPosition(newX, newY);
 
         for (Car nextCar : loadedCars) {

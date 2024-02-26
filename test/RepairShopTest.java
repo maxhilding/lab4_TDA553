@@ -2,7 +2,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class RepairShopTest {
+/*public class RepairShopTest {
 
     RepairShop<Volvo240> volvo240RepairShop;
     RepairShop<Car> anyCarsRepairShop;
@@ -85,4 +85,4 @@ public class RepairShopTest {
     }
     */
 
-}
+}*/

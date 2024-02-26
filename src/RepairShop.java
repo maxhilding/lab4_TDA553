@@ -2,7 +2,7 @@ import javax.imageio.ImageReadParam;
 import java.awt.geom.Point2D;
 import java.util.*;
 
-public class RepairShop<T extends Car> implements Loadable<T>{
+public class RepairShop<T extends Car> implements Loadable<T>, Positioned{
 
     private final int maxNumberOfLoadedCars;
 
@@ -11,6 +11,8 @@ public class RepairShop<T extends Car> implements Loadable<T>{
     private Point2D.Double position;
 
     private Stack<T> loadedCars;
+
+    private static class t = T.getClass();
 
     public RepairShop(int maxLoad, String repairShopName) {
         maxNumberOfLoadedCars = maxLoad;
@@ -52,7 +54,21 @@ public class RepairShop<T extends Car> implements Loadable<T>{
         else {
             throw new RuntimeException("The repairshop is full"); //throwing 'wrong' exception here hehe
 
+            }
         }
+
+
+
+    public double getX(){
+        return position.getX();
+    }
+
+    public double getY(){
+        return position.getY();
+    }
+
+    public T getT(){
+        return t;
     }
 
 }

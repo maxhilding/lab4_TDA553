@@ -1,8 +1,15 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import static java.lang.Math.abs;
 
@@ -24,8 +31,11 @@ public class CarController {
     // The frame that represents this instance View of the MVC pattern
     CarView frame;
     // A list of cars, modify if needed
-    ArrayList<Car> cars = new ArrayList<>();
-    RepairShop<Volvo240> volvoRepairShop;
+    ArrayList<MoveableGameObject> cars = new ArrayList<>();
+    ArrayList<RepairShopGameObject> repairshops = new ArrayList<>();
+
+    int x_border = 0;
+    int y_border = 0;
 
 
     //methods:
@@ -39,81 +49,112 @@ public class CarController {
         mySaab.setPosition(0, 100);
         Car myScania = new Scania();
         myScania.setPosition(0, 200);
-        cc.cars.add(myVolvo);
-        cc.cars.add(mySaab);
-        cc.cars.add(myScania);
+        RepairShop<Volvo240> volvo240Repairshop = new RepairShop<>(5, "VolvoRepair");
+        volvo240Repairshop.setPosition(300.0, 0.0);
 
-        cc.volvoRepairShop = new RepairShop<>(5, "VolvoRepair");
-        cc.volvoRepairShop.setPosition(300.0, 0.0);
+        try {
+            // You can remove the "pics" part if running outside of IntelliJ and
+            // everything is in the same main folder.
+            // volvoImage = ImageIO.read(new File("Volvo240.jpg"));
 
+            // Rememember to rightclick src New -> Package -> name: pics -> MOVE *.jpg to pics.
+            // if you are starting in IntelliJ.
+            BufferedImage volvoImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Volvo240.jpg"));
+            BufferedImage saabImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Saab95.jpg"));
+            BufferedImage scaniaImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Scania.jpg"));
+            BufferedImage volvoWorkshopImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/VolvoBrand.jpg"));
+
+            cc.cars.add(new MoveableGameObject(volvoImage, myVolvo));
+            cc.cars.add(new MoveableGameObject(saabImage, mySaab));
+            cc.cars.add(new MoveableGameObject(scaniaImage, myScania));
+            cc.repairshops.add(new RepairShopGameObject(volvoWorkshopImage, volvo240Repairshop));
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
 
         // Start a new view and send a reference of self
         cc.frame = new CarView("CarSim 1.0", cc);
-
+        cc.x_border = cc.frame.getPanelXBorder();
+        cc.y_border = cc.frame.getPanelYBorder();
+        cc.setUpButtons();
         // Start the timer
         cc.timer.start();
     }
+    private void setUpButtons(){
+
+        frame.gasButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            gas(frame.gasAmount);
+        }
+        });
+
+        frame.brakeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                brake(frame.gasAmount);
+            }
+        });
+
+        frame.turboOnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                turboOn();
+            }
+        });
+
+        frame.turboOffButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                turboOff();
+            }
+        });
+
+
+        frame.liftBedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                liftBed();
+            }
+        });
+
+        frame.lowerBedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                lowerBed();
+            }
+        });
+
+        frame.startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                startAllCars();
+            }
+        });
+
+        frame.stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                stopAllCars();
+            }
+        });}
 
     /* Each step the TimerListener moves all the cars in the list and tells the
     * view to update its images. Change this method to your needs.
     * */
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            ArrayList<Volvo240> loaded_cars = new ArrayList<>();
-            for (Car car : cars) {
+            ArrayList<MoveableGameObject> loaded_cars = new ArrayList<>();
+            for (MoveableGameObject car : cars) {
                 car.move();
                 // edge collision
-                int x_border = frame.getPanelXBorder();
-                int y_border = frame.getPanelYBorder();
-                int width = 20;
-                int height = 20;
-                if(car instanceof Volvo240){
-                    width = frame.drawPanel.volvoImage.getWidth();
-                    height = frame.drawPanel.volvoImage.getHeight();
-                }
-                else if(car instanceof Saab95){
-                    width = frame.drawPanel.saabImage.getWidth();
-                    height = frame.drawPanel.saabImage.getHeight();
-                }
-                else if(car instanceof Scania){
-                    width = frame.drawPanel.scaniaImage.getWidth();
-                    height = frame.drawPanel.scaniaImage.getHeight();
-                }
-
-                int x0 = (int) Math.round(car.getPosition().getX());
-                int y0 = (int) Math.round(car.getPosition().getY());
-                if(x0 + width > x_border || x0 < 0) {
-                    car.setDirection(-car.getDirection().getX(), car.getDirection().getY());
-                }
-                if(y0 + height > y_border || y0 < 0) {
-                    car.setDirection(car.getDirection().getX(), -car.getDirection().getY());
-                }
+                detectEdgeCollision(car);
 
                 //repairshop collision
-
-                if (car instanceof Volvo240) {
-                    int workshopWidth = frame.drawPanel.volvoWorkshopImage.getWidth();
-                    int workshopHeight = frame.drawPanel.volvoWorkshopImage.getHeight();
-                    //From left
-                    if (abs(((car.getPosition().getX() + width)- volvoRepairShop.getPosition().getX())) < 5){
-                        volvoRepairShop.loadOn((Volvo240) (car));
-                        loaded_cars.add((Volvo240) car);
-                    }
-                    // From right
-                    else if (abs(((car.getPosition().getX())- volvoRepairShop.getPosition().getX()+workshopWidth)) < 5){
-                        volvoRepairShop.loadOn((Volvo240) (car));
-                        loaded_cars.add((Volvo240) car);
-                    }
-                    //From bottom
-                    else if (abs(((car.getPosition().getY())- volvoRepairShop.getPosition().getY()+workshopHeight)) < 5){
-                        volvoRepairShop.loadOn((Volvo240) (car));
-                        loaded_cars.add((Volvo240) car);
-                    }
-                    //From top
-                    else if (abs(((car.getPosition().getY()+height)- volvoRepairShop.getPosition().getY())) < 5){
-                        volvoRepairShop.loadOn((Volvo240) (car));
-                        loaded_cars.add((Volvo240) car);
-                    }
+                for(RepairShopGameObject repairshop : repairshops){
+                    if((Car) car.getParent() instanceof repairshop.getParent().getClass()){
+                        detectRepairShopCollision(car, repairshop, loaded_cars);}
                 }
 
 
@@ -122,8 +163,47 @@ public class CarController {
                 frame.drawPanel.repaint();
 
             }
-            for(Car car: loaded_cars) {
+            for(MoveableGameObject car: loaded_cars) {
                 cars.remove(car);
+            }
+        }
+
+        private void detectEdgeCollision(MoveableGameObject car) {
+            int width = car.getWidth();
+            int height = car.getHeight();
+
+            int x0 = (int) Math.round(car.getX());
+            int y0 = (int) Math.round(car.getY());
+            if(x0 + width > x_border || x0 < 0) {
+                car.setDirection(-car.getDirection().getX(), car.getDirection().getY());
+            }
+            if(y0 + height > y_border || y0 < 0) {
+                car.setDirection(car.getDirection().getX(), -car.getDirection().getY());
+            }
+        }
+
+        private void detectRepairShopCollision(MoveableGameObject car, RepairShopGameObject repairshop, ArrayList<MoveableGameObject> loaded_cars) {
+            int width = repairshop.getWidth();
+            int height = repairshop.getHeight();
+            //From left
+            if (abs(((car.getX() + width)- repairshop.getX())) < 5){
+                repairshop.loadOn((Car) car.getParent());
+                loaded_cars.add(car);
+            }
+            // From right
+            else if (abs(((car.getX())- repairshop.getX()+width)) < 5){
+                repairshop.loadOn((Car) car.getParent());
+                loaded_cars.add(car);
+            }
+            //From bottom
+            else if (abs(((car.getY())- repairshop.getY()+height)) < 5){
+                repairshop.loadOn((Car) car.getParent());
+                loaded_cars.add(car);
+            }
+            //From top
+            else if (abs(((car.getY()+ height)- repairshop.getY())) < 5){
+                repairshop.loadOn((Car) car.getParent());
+                loaded_cars.add(car);
             }
         }
     }
@@ -131,22 +211,23 @@ public class CarController {
     // Calls the gas method for each car once
     void gas(int amount) {
         double gas = ((double) amount) / 100;
-        for (Car car : cars
+        for (MoveableGameObject car : cars
                 ) {
-            car.gas(gas);
+            ((Car)car.getParent()).gas(gas);
         }
     }
 
     //la till brake
     void brake(int amount){
         double brake = ((double) amount) / 100;
-        for (Car car : cars) {
-            car.brake(brake);
+        for (MoveableGameObject car : cars) {
+            ((Car) car.getParent()).brake(brake);
         }
     }
 
     void turboOn(){
-        for (Car car: cars) {
+        for (MoveableGameObject carobject: cars) {
+            Car car = (Car) carobject.getParent();
             if (car instanceof Saab95) {
                 ((Saab95) car).setTurboOn();
             }
@@ -155,7 +236,8 @@ public class CarController {
     }
 
     void turboOff(){
-        for (Car car: cars) {
+        for (MoveableGameObject carobject: cars) {
+            Car car = (Car) carobject.getParent();
             if (car instanceof Saab95) {
                 ((Saab95) car).setTurboOff();
             }
@@ -163,28 +245,28 @@ public class CarController {
     }
 
     void liftBed(){
-        for(Car car: cars){
-            if(car instanceof Scania){
-                ((Scania) car).raiseBed();
+        for(MoveableGameObject car: cars){
+            if(car.getParent() instanceof Scania){
+                ((Scania) car.getParent()).raiseBed();
             }
         }
     }
 
     void lowerBed(){
-        for(Car car: cars){
-            if(car instanceof Scania){
-                ((Scania) car).lowerBed();
+        for(MoveableGameObject car: cars){
+            if(car.getParent() instanceof Scania){
+                ((Scania) car.getParent()).lowerBed();
             }
     }
     }
     void startAllCars() {
-        for (Car car: cars) {
-            car.startEngine();
+        for (MoveableGameObject car: cars) {
+            ((Car)car.getParent()).startEngine();
         }
     }
     void stopAllCars() {
-        for (Car car: cars) {
-            car.stopEngine();
+        for (MoveableGameObject car: cars) {
+            ((Car)car.getParent()).stopEngine();
         }
     }
 }

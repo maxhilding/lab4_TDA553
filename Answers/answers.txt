@@ -107,3 +107,10 @@ y-positioner. Setupen med intiering av instanser av gameObject sker i carControl
 kan förlytta sig genom att dens parent object implementerar Moveable (alltså har implementation av move(), turnLeft(), turnRight())
 6. Funktionell nedbrytning med statiska hjälpmetoder för "collision detection" och
  "load on detection" i actionPerformed inom TimerListener
+
+Lab 4
+ - Vilka avvikelser från MVC-idealet kan ni identifiera i det ursprungliga användargränssnittet? Vad borde ha gjorts smartare, dummare eller tunnare?
+ View
+
+
+ - Vilka av dessa brister åtgärdade ni med er nya design från del 2A? Hur då? Vilka brister åtgärdade ni inte?

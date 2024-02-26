@@ -3,7 +3,7 @@ import java.awt.geom.Point2D;
 import java.util.Vector;
 
 
-public abstract class Car implements Moveable{
+public abstract class Car implements Moveable, Positioned{
 
     private static final double handling = 90;
 
@@ -99,12 +99,28 @@ public abstract class Car implements Moveable{
         }
     }
 
+    public double getX(){
+        return position.getX();
+    }
+
+    public double getY(){
+        return position.getY();
+    }
+
     public Point2D.Double getPosition(){
-        return position;
+        return new Point2D.Double(position.getX(), position.getY());
     }
 
     public Point2D.Double getDirection(){
-        return direction;
+        return new Point2D.Double(direction.getX(), direction.getY());
+    }
+
+    public double getXDirection(){
+        return getXDirection();
+    }
+
+    public double getYDirection(){
+        return getYDirection();
     }
 
     public void setDirection(double newX, double newY) {
@@ -116,8 +132,8 @@ public abstract class Car implements Moveable{
 
     public void move(){
         if(isDriveable){
-        double newX = getCurrentSpeed() * getDirection().getX() + getPosition().getX();
-        double newY = getCurrentSpeed() * getDirection().getY() + getPosition().getY();
+        double newX = getCurrentSpeed() * direction.getX() + position.getX();
+        double newY = getCurrentSpeed() * direction.getY() + position.getY();
         setPosition(newX, newY);}
     }
     public void turnLeft(){
