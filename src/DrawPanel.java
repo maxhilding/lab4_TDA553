@@ -10,7 +10,7 @@ import javax.swing.*;
 
 // This panel represents the animated part of the view with the car images.
 
-public class DrawPanel extends JPanel{
+public class    DrawPanel extends JPanel{
 
     BufferedImage volvoWorkshopImage;
 

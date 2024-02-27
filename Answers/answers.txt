@@ -110,7 +110,19 @@ kan förlytta sig genom att dens parent object implementerar Moveable (alltså h
 
 Lab 4
  - Vilka avvikelser från MVC-idealet kan ni identifiera i det ursprungliga användargränssnittet? Vad borde ha gjorts smartare, dummare eller tunnare?
- View
+ View ska vara dum. Men i det ursprungliga så genomförde den beräkningar för förflyttning (ska vara i modellen) och tog input (ska vara i controller).
+ Controller ska vara tunn. I det ursprungliga var CarController snarare som en application och en model. Den intitierade simuleringen,
+ hade loopen för simuleringen, genomförde beräkningar för spellogik och anropade delar av modellen efter input från viewen.
+ Egentligen borde CarController bara ta input och anropa modellen.
+ Angående modellen så borde den ha haft mer logik hos sig.
 
 
  - Vilka av dessa brister åtgärdade ni med er nya design från del 2A? Hur då? Vilka brister åtgärdade ni inte?
+ Åtgärder:
+ * Vi föflyttade mottagande och hantering av input till controller så att view blev dummare.
+ * Läsa in bilder förflyttades från drawpanel till CarController
+
+ Brister som fortfarande behöver åtgärdas:
+ * CarController är för bred. Behöver introducera en applikation som tar över mycket ansvar.
+ * Utöka modellen eventuellt med collision detection och liknande.
+ * Tydligare separation av MVC+applikation, modularisering.
