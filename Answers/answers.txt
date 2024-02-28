@@ -27,7 +27,7 @@ Truck looks good...
 
 Vilka klasser är beroende av varandra som inte borde vara det?
 Utöver det vi lyft tidigare, så bör inte CarView ha en CarController, och egentligen knappast åt andra hållet heller.
-Nästan aldrig bra att ha beroenden åt bägge håll. Enligt Model-View-Controller så borde det finnas en
+Nästan aldrig bra att ha beroenden åt bägge håll. Enligt model-View-Controller så borde det finnas en
 mellanhand mellan CarView och CarController. Vår tanke är att man kan låta CarController lyssna efter input (buttons)
 via sin CarView, på så vis fokuserar man CarViews ansvar till att rita upp sig själv samtidigt som man
 tar bort associationen från CarView till CarController.
