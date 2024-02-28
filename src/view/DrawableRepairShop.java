@@ -55,4 +55,8 @@ public class DrawableRepairShop extends Component implements IRepairShop {
     public ICar unload(){
         return wrappedRepairShop.unload();
     }
+
+    public boolean repairShopFull() {
+        return wrappedRepairShop.repairShopFull();
+    }
 }

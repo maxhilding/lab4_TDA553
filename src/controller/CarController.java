@@ -87,5 +87,21 @@ public class CarController {
                 model.stopAllCars();
             }
         });
+
+        frame.addCarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.addACar();
+
+            }
+        });
+
+        frame.removeCarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.removeACar();
+            }
+        });
+
         }
 }

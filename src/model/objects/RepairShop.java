@@ -14,21 +14,21 @@ public class RepairShop<T extends ICar> implements IRepairShop, ILoadable<T>{
 
     private Stack<T> loadedCars;
 
-    private T dummy;
+    private String type;
 
 
-    public RepairShop(int maxLoad, String repairShopName, double x, double y, T dummy) {
+    public RepairShop(int maxLoad, String repairShopName, double x, double y, String type) {
         capacity = maxLoad;
         loadedCars = new Stack<>();
         this.repairShopName = repairShopName;
         this.position = new Point2D.Double(x, y);
-        this.dummy = dummy;
+        this.type = type;
     }
 
 
 
     public String getModelName(){
-        return dummy.getModelName();
+        return type;
     }
 
     public Point2D.Double getPosition(){
@@ -62,5 +62,9 @@ public class RepairShop<T extends ICar> implements IRepairShop, ILoadable<T>{
             throw new RuntimeException("The repairshop is full"); //throwing 'wrong' exception here hehe
 
         }
+    }
+
+    public boolean repairShopFull() {
+        return loadedCars.size() >= capacity;
     }
 }

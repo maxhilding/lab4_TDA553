@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 
 public class CarView extends JPanel implements ModelUpdateListener {
-
+    BufferedImages images;
     //Defensive copying later
     public ArrayList<DrawableCar> carList = new ArrayList<>();
     public ArrayList<DrawableRepairShop> repairShopList = new ArrayList<>();
@@ -28,9 +28,10 @@ public class CarView extends JPanel implements ModelUpdateListener {
     public ArrayList<DrawableRepairShop> getRepairShops() {return repairShopList;}
 
     public void addModel(Model model, BufferedImages images) {
+        this.images = images;
         for (Iterator<ICar> it = model.getCars(); it.hasNext(); ) {
             ICar car = it.next();
-            actOnCarAdded(car, images);
+            actOnCarAdded(car);
         }
         for (Iterator<RepairShop<ICar>> it = model.getRepairShops(); it.hasNext();) {
             RepairShop<ICar> repairShop =it.next();
@@ -50,7 +51,7 @@ public class CarView extends JPanel implements ModelUpdateListener {
         repaint();
     }
 
-    public void actOnCarAdded(ICar car, BufferedImages images) {
+    public void actOnCarAdded(ICar car) {
         if (car instanceof Volvo240) {
             DrawableCar drawableCar = new DrawableCar(car, images.getVolvoImage());
             add(drawableCar);
@@ -67,6 +68,15 @@ public class CarView extends JPanel implements ModelUpdateListener {
             add(drawableCar);
             carList.add(drawableCar);
 
+        }
+    }
+
+    public void actOnCarRemoved(ICar car){
+        for (DrawableCar drawableCar : carList){
+            if (drawableCar.wrappedCar == car) {
+                drawableCar.setPosition(-drawableCar.getWidth(), -drawableCar.getHeight());
+                carList.remove(drawableCar);
+            }
         }
     }
 

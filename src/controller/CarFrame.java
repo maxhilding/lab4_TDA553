@@ -29,6 +29,13 @@ public class CarFrame extends JFrame{
     JButton startButton = new JButton("Start all cars");
     JButton stopButton = new JButton("Stop all cars");
 
+    //our new buttons
+    JButton addCarButton = new JButton("Add Car");
+
+    JButton removeCarButton = new JButton("Remove Car");
+
+
+
     // Constructor
     public CarFrame(String framename){
         initComponents(framename);
@@ -66,7 +73,7 @@ public class CarFrame extends JFrame{
 
         this.add(gasPanel);
 
-        controlPanel.setLayout(new GridLayout(2,4));
+        controlPanel.setLayout(new GridLayout(2,5));
 
         controlPanel.add(gasButton, 0);
         controlPanel.add(turboOnButton, 1);
@@ -74,6 +81,9 @@ public class CarFrame extends JFrame{
         controlPanel.add(brakeButton, 3);
         controlPanel.add(turboOffButton, 4);
         controlPanel.add(lowerBedButton, 5);
+        controlPanel.add(addCarButton, 6);
+        controlPanel.add(removeCarButton, 7);
+
         controlPanel.setPreferredSize(new Dimension((X/2)+4, 200));
         this.add(controlPanel);
         controlPanel.setBackground(Color.CYAN);
@@ -89,6 +99,8 @@ public class CarFrame extends JFrame{
         stopButton.setForeground(Color.black);
         stopButton.setPreferredSize(new Dimension(X/5-15,200));
         this.add(stopButton);
+
+
 
 
         // Make the frame pack all it's components by respecting the sizes if possible.

@@ -77,4 +77,14 @@ class CarSet implements Iterable<ICar>{
             car.stopEngine();
         }
     }
+
+    public int size(){
+        return cars.size();
+    }
+
+    public ICar remove(int i){
+        ICar removedCar = cars.get(i);
+        cars.remove(i);
+        return removedCar;
+    }
 }

@@ -85,4 +85,34 @@ public class Model implements ModelUpdateListener{
         cars.stopAllCars();
     }
 
+
+    //chain of responsibility
+    public void addACar() {
+        if (cars.size() < 10){
+        ICar volvo = new Volvo240(0,100);
+        cars.addCar(volvo);
+        actOnCarAdded(volvo); //right here
+    }}
+
+
+    //chain of responsibility here aswell
+    public void removeACar() {
+        Random r = new Random();
+        int low = 0;
+        int high = cars.size();
+        int result = r.nextInt(high-low) + low;
+        ICar removedCar = cars.remove(result);
+        actOnCarRemoved(removedCar);
+    }
+
+    public void actOnCarAdded(ICar car){
+        for (ModelUpdateListener l : listeners)
+            l.actOnCarAdded(car);
+    }
+
+    public void actOnCarRemoved(ICar car){
+        for (ModelUpdateListener l : listeners)
+            l.actOnCarRemoved(car);
+    }
+
 }

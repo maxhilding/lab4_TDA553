@@ -94,7 +94,7 @@ public class CarSimulator {
     
     private static void detectRepairShopCollision(DrawableCar car, ArrayList<DrawableRepairShop> repairShops, ArrayList<DrawableCar> loadedCars) {
         for (DrawableRepairShop repairShop : repairShops) {
-            if(Objects.equals(car.getModelName(), repairShop.getModelName())){
+            if((Objects.equals(car.getModelName(), repairShop.getModelName()) || Objects.equals(repairShop.getModelName(), "Car")) && !repairShop.repairShopFull()){
                 int width = repairShop.getWidth();
                 int height = repairShop.getHeight();
 
@@ -104,10 +104,12 @@ public class CarSimulator {
                 double repairShopX = repairShop.getPosition().getX();
                 double repairShopY = repairShop.getPosition().getY();
 
+                //TODO fix so that collisions take into account y-position aswell
                 //From left
                 if (Math.abs(carX + width - repairShopX) < 5) {
                     repairShop.load(car);
-                    car.setPosition(repairShop.getPosition().getX(), repairShop.getPosition().getY()+ height - car.getHeight());
+                    //car.setPosition(repairShop.getPosition().getX(), repairShop.getPosition().getY()+ height - car.getHeight());
+                    car.setPosition(-car.getWidth(), -car.getHeight());
                     loadedCars.add(car);
                 }
                 // From right
