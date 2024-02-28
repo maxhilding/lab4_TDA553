@@ -9,12 +9,17 @@ public class Saab95 implements ICar {
 
     private boolean turboOn;
 
+
+
     public Saab95(double x, double y){
         wrappedCar = new BaseCar(2, 125, Color.red, "Saab95", x, y);
         turboOn = false;
 
     }
 
+    public String getModelName(){
+        return wrappedCar.getModelName();
+    }
 
     // Saab95 specific
     public void setTurboOn(){
@@ -31,9 +36,6 @@ public class Saab95 implements ICar {
 
     // General car methods
     // Attributes
-    public String getModelName(){
-        return wrappedCar.getModelName();
-    };
 
     public int getNrDoors(){
         return wrappedCar.getNrDoors();
@@ -43,6 +45,16 @@ public class Saab95 implements ICar {
         return wrappedCar.getEnginePower();
     };
     public Color getColor(){return wrappedCar.getColor();};
+
+    public boolean getIsDriveable(){return wrappedCar.getIsDriveable();}
+
+    public void setIsUnDriveable(){
+        wrappedCar.setIsUnDriveable();
+    }
+
+    public void setIsDriveable(){
+        wrappedCar.setIsDriveable();
+    }
 
     public double getHandling(){
         return wrappedCar.getHandling();}

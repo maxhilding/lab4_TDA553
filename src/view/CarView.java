@@ -25,6 +25,8 @@ public class CarView extends JPanel implements ModelUpdateListener {
         return carList;
     }
 
+    public ArrayList<DrawableRepairShop> getRepairShops() {return repairShopList;}
+
     public void addModel(Model model, BufferedImages images) {
         for (Iterator<ICar> it = model.getCars(); it.hasNext(); ) {
             ICar car = it.next();
@@ -35,7 +37,6 @@ public class CarView extends JPanel implements ModelUpdateListener {
             actOnAddedRepairShop(repairShop, images);
         }
     }
-
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

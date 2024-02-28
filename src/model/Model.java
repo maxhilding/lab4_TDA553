@@ -31,12 +31,16 @@ public class Model implements ModelUpdateListener{
     }
 
 
-    public void addRepairShop(RepairShop<ICar> repairShop){
+    public void addRepairShop(RepairShop repairShop){
         repairShops.addRepairShop(repairShop);
     }
 
     public void addCar(ICar car){
         cars.addCar(car);
+    }
+
+    public void removeCar(ICar car){
+        cars.removeCar(car);
     }
 
     public Iterator<ICar> getCars(){

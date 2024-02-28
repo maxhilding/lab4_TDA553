@@ -3,7 +3,8 @@ package model.objects;
 import java.awt.geom.Point2D;
 import java.util.Stack;
 
-public class RepairShop<T extends ICar> implements IRepairShop{
+
+public class RepairShop<T extends ICar> implements IRepairShop, ILoadable<T>{
 
     private final int capacity;
 
@@ -13,11 +14,21 @@ public class RepairShop<T extends ICar> implements IRepairShop{
 
     private Stack<T> loadedCars;
 
-    public RepairShop(int maxLoad, String repairShopName, double x, double y) {
+    private T dummy;
+
+
+    public RepairShop(int maxLoad, String repairShopName, double x, double y, T dummy) {
         capacity = maxLoad;
         loadedCars = new Stack<>();
         this.repairShopName = repairShopName;
         this.position = new Point2D.Double(x, y);
+        this.dummy = dummy;
+    }
+
+
+
+    public String getModelName(){
+        return dummy.getModelName();
     }
 
     public Point2D.Double getPosition(){
@@ -34,6 +45,7 @@ public class RepairShop<T extends ICar> implements IRepairShop{
         return repairShopName;
     }
 
+
     public T unload() {
         T car = loadedCars.pop();
         car.stopEngine();
@@ -44,6 +56,7 @@ public class RepairShop<T extends ICar> implements IRepairShop{
         if (loadedCars.size() < capacity) {
             loadedCars.push(car);
             car.stopEngine();
+            car.setIsUnDriveable();
         }
         else {
             throw new RuntimeException("The repairshop is full"); //throwing 'wrong' exception here hehe

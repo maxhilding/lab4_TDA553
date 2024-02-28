@@ -21,7 +21,7 @@ public class BaseCar implements ICar{
 
     public double speedFactor = 1;
 
-    public boolean isDriveable = true;
+    private boolean isDriveable = true;
 
     public BaseCar(int nrDoors, double enginePower, Color color, String modelName, double x, double y) {
         this.nrDoors = nrDoors;
@@ -29,7 +29,7 @@ public class BaseCar implements ICar{
         this.color = color;
         this.modelName = modelName;
         position = new Point2D.Double(x, y);
-        direction = new Point2D.Double(1,0);
+        direction = new Point2D.Double(1, 0);
         stopEngine();
     }
 
@@ -49,8 +49,16 @@ public class BaseCar implements ICar{
         return color;
     }
 
-    public String getModelName() {
-        return modelName;
+    public String getModelName() {return modelName;}
+
+    public boolean getIsDriveable(){return isDriveable;}
+
+    public void setIsUnDriveable(){
+        isDriveable = false;
+    }
+
+    public void setIsDriveable(){
+        isDriveable = true;
     }
 
     public void startEngine(){

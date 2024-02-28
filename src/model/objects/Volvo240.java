@@ -10,10 +10,10 @@ public class Volvo240 implements ICar {
 
     public Volvo240(double x, double y) {
         wrappedCar = new BaseCar(4, 100, Color.black, "Volvo240", x, y);
+
     }
 
     //Volvo240 specific
-
 
     // General car methods
     // Attributes
@@ -29,6 +29,16 @@ public class Volvo240 implements ICar {
         return wrappedCar.getEnginePower();
     };
     public Color getColor(){return wrappedCar.getColor();};
+
+    public boolean getIsDriveable(){return wrappedCar.getIsDriveable();}
+
+    public void setIsUnDriveable(){
+        wrappedCar.setIsUnDriveable();
+    }
+
+    public void setIsDriveable(){
+        wrappedCar.setIsUnDriveable();
+    }
 
     public double getHandling(){
         return wrappedCar.getHandling();}

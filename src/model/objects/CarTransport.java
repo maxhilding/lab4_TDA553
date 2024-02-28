@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Stack;
 
-public class CarTransport implements ITruck, ILoadable{
+public class CarTransport implements ITruck, ILoadable<ICar>{
 
     private boolean bedIsUp = true;
     private Stack<ICar> loadedCars;
@@ -101,6 +101,16 @@ public class CarTransport implements ITruck, ILoadable{
         return wrappedCar.getEnginePower();
     };
     public Color getColor(){return wrappedCar.getColor();};
+
+    public boolean getIsDriveable(){return wrappedCar.getIsDriveable();}
+
+    public void setIsUnDriveable(){
+        wrappedCar.setIsUnDriveable();
+    }
+
+    public void setIsDriveable(){
+        wrappedCar.setIsDriveable();
+    }
 
     public double getHandling(){
         return wrappedCar.getHandling();}

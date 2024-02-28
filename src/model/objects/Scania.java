@@ -12,8 +12,12 @@ public class Scania implements ITruck{
     private double bedAngle;
 
     public Scania(double x, double y) {
-        wrappedCar = new BaseCar(2, 770, Color.red, "ScaniaV8", x, y);
+        wrappedCar = new BaseCar(2, 770, Color.red, "Scania", x, y);
         bedAngle = 0;
+
+    }
+    public String getModelName(){
+        return wrappedCar.getModelName();
     }
 
     // Truck specific
@@ -26,7 +30,7 @@ public class Scania implements ITruck{
         if (wrappedCar.getCurrentSpeed() == 0){
             bedAngle = Math.min(bedAngle + bedSensitivity, 70);
             wrappedCar.stopEngine();
-            wrappedCar.isDriveable = false;
+            wrappedCar.setIsUnDriveable();
             System.out.println("Bed is raised");
         }
 
@@ -37,7 +41,7 @@ public class Scania implements ITruck{
             bedAngle = Math.max(bedAngle - bedSensitivity,0);
             if (bedAngle == 0) {
                 wrappedCar.stopEngine();
-                wrappedCar.isDriveable = true;
+                wrappedCar.setIsDriveable();
             }
 
 
@@ -54,9 +58,7 @@ public class Scania implements ITruck{
 
     // General car methods
     // Attributes
-    public String getModelName(){
-        return wrappedCar.getModelName();
-    };
+
 
     public int getNrDoors(){
         return wrappedCar.getNrDoors();
@@ -66,6 +68,16 @@ public class Scania implements ITruck{
         return wrappedCar.getEnginePower();
     };
     public Color getColor(){return wrappedCar.getColor();};
+
+    public boolean getIsDriveable(){return wrappedCar.getIsDriveable();}
+
+    public void setIsUnDriveable(){
+        wrappedCar.setIsUnDriveable();
+    }
+
+    public void setIsDriveable(){
+        wrappedCar.setIsDriveable();
+    }
 
     public double getHandling(){
         return wrappedCar.getHandling();}

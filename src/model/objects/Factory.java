@@ -20,9 +20,14 @@ public class Factory {
         return new CarTransport(maxLoad,name, x, y);
     }
 
-    public static <T extends ICar> RepairShop<T> createRepairShop(int maxLoad, String repairShopName, double x, double y){
-        return new RepairShop<T>(maxLoad, repairShopName, x, y);
+    /*public static <T extends ICar> RepairShop<T> createRepairShop(int maxLoad, String repairShopName, double x, double y){
+        return new RepairShop<>(maxLoad, repairShopName, x, y);
+    }*/
+
+    public static RepairShop<Volvo240> createVolvoRepairShop(int maxLoad, String repairShopName, double x, double y){
+        return new RepairShop<>(maxLoad, repairShopName, x, y, new Volvo240(0, 0));
     }
+
 
 
     public static ICar createCar(int nrDoors, double enginePower, Color color, String modelName, double x, double y){

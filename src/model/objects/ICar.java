@@ -17,6 +17,12 @@ public interface ICar {
 
     double getCurrentDegree();
 
+    boolean getIsDriveable();
+
+    void setIsUnDriveable();
+
+    void setIsDriveable();
+
 
     // Engine
     void startEngine();

@@ -10,6 +10,8 @@ class CarSet implements Iterable<ICar>{
         cars.add(c);
     }
 
+    public void removeCar(ICar c){cars.remove(c);}
+
     public void move(){
         for (ICar car : cars) {
             car.move();

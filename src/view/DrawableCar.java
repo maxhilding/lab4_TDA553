@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 public class DrawableCar extends Component implements ICar{
-    private final ICar wrappedCar;
+    public final ICar wrappedCar;
 
     private final BufferedImage image;
 
@@ -69,6 +69,18 @@ public class DrawableCar extends Component implements ICar{
     public void stopEngine(){
         wrappedCar.stopEngine();
     };
+
+    public boolean getIsDriveable(){
+        return wrappedCar.getIsDriveable();
+    }
+
+    public void setIsUnDriveable(){
+        wrappedCar.setIsUnDriveable();
+    }
+
+    public void setIsDriveable(){
+        wrappedCar.setIsDriveable();
+    }
 
     // Speed and acceleration
 
