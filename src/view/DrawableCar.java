@@ -71,7 +71,7 @@ public class DrawableCar extends Component implements ICar{
     };
 
     // Speed and acceleration
-    public double getSpeedFactor(){return wrappedCar.getSpeedFactor();}
+
 
     public void incrementSpeed(double amount){wrappedCar.incrementSpeed(amount);}
     public void decrementSpeed(double amount){wrappedCar.decrementSpeed(amount);}

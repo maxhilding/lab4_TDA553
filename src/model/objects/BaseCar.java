@@ -19,6 +19,10 @@ public class BaseCar implements ICar{
 
     private double currentDegree = 90;
 
+    public double speedFactor = 1;
+
+    public boolean isDriveable = true;
+
     public BaseCar(int nrDoors, double enginePower, Color color, String modelName, double x, double y) {
         this.nrDoors = nrDoors;
         this.enginePower = enginePower;
@@ -50,7 +54,9 @@ public class BaseCar implements ICar{
     }
 
     public void startEngine(){
-        currentSpeed = 0.1;
+        if(isDriveable && currentSpeed==0) {
+            currentSpeed = 0.1;
+        }
     }
 
     public void stopEngine(){
@@ -61,7 +67,7 @@ public class BaseCar implements ICar{
 
     public double getCurrentDegree(){return currentDegree;}
 
-    
+
     public void incrementSpeed(double amount){
         currentSpeed = Math.min(getCurrentSpeed() + speedFactor * amount,enginePower);
     }

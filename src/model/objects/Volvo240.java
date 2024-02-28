@@ -49,12 +49,20 @@ public class Volvo240 implements ICar {
     // Speed and acceleration
 
     public void incrementSpeed(double amount){
+        wrappedCar.speedFactor = Math.max(getEnginePower() * 0.01 * trimFactor,0);
         wrappedCar.incrementSpeed(amount);
     }
 
     public void decrementSpeed(double amount){wrappedCar.decrementSpeed(amount);}
 
-    public void gas(double amount){wrappedCar.gas(amount);}
+    public void gas(double amount){
+        if(amount>=0 && amount<= 1 && getCurrentSpeed() > 0 ){
+            incrementSpeed(amount);
+        }
+        else {
+            throw new IllegalArgumentException(amount + " not allowed as an argument");
+        }
+    }
 
     public void brake(double amount){wrappedCar.brake(amount);}
 

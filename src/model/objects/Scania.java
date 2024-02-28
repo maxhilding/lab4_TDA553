@@ -26,6 +26,8 @@ public class Scania implements ITruck{
         if (wrappedCar.getCurrentSpeed() == 0){
             bedAngle = Math.min(bedAngle + bedSensitivity, 70);
             wrappedCar.stopEngine();
+            wrappedCar.isDriveable = false;
+            System.out.println("Bed is raised");
         }
 
     }
@@ -35,12 +37,16 @@ public class Scania implements ITruck{
             bedAngle = Math.max(bedAngle - bedSensitivity,0);
             if (bedAngle == 0) {
                 wrappedCar.stopEngine();
+                wrappedCar.isDriveable = true;
             }
+
+
         }
     }
 
 
     public void gas(double amount){
+        System.out.println(bedAngle);
         if (bedAngle == 0){
             wrappedCar.gas(amount);
         }
