@@ -11,6 +11,8 @@ import view.DrawableCar;
 import controller.*;
 import view.DrawableRepairShop;
 import model.objects.RepairShop;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -34,8 +36,8 @@ public class CarSimulator {
     public static Model initModel() {
         Model model = new Model();
 
-        model.addCar(Factory.createVolvo240(0, 100));
-        model.addCar(Factory.createSaab95(0, 300));
+        model.addCar(Factory.createVolvo240(0, 300));
+        model.addCar(Factory.createSaab95(0, 100));
         model.addCar(Factory.createScania(0, 200));
         model.addRepairShop(Factory.createVolvoRepairShop(4, "VolvoRepairShop", 300, 100));
 
@@ -110,7 +112,7 @@ public class CarSimulator {
                 double repairShopY = repairShop.getPosition().getY();
 
                 //TODO fix so that collisions take into account y-position aswell
-                if (detectXCollision(carX, carY, carWidth, carHeight, repairShopX, repairShopY, width, height)) {
+                if (detectObjectCollision(carX, carY, carWidth, carHeight, repairShopX, repairShopY, width, height)) {
                     repairShop.load(car);
                     //car.setPosition(repairShop.getPosition().getX(), repairShop.getPosition().getY()+ height - car.getHeight());
                     car.setPosition(-car.getWidth(), -car.getHeight());
@@ -118,28 +120,30 @@ public class CarSimulator {
                 }
 
                 //From bottom
-                else if (Math.abs(carY - repairShopY + height) < 5) {
-                    repairShop.load(car);
-                    car.setPosition(repairShop.getPosition().getX(), repairShop.getPosition().getY() + height - car.getHeight());
-                    loadedCars.add(car);
-                }
-                //From top
-                else if (Math.abs((carY + height - repairShopY)) < 5) {
-                    repairShop.load(car);
-                    car.setPosition(repairShop.getPosition().getX(), repairShop.getPosition().getY() + height - car.getHeight());
-                    loadedCars.add(car);
-                }
+//                else if (Math.abs(carY - repairShopY + height) < 5) {
+//                    repairShop.load(car);
+//                    car.setPosition(repairShop.getPosition().getX(), repairShop.getPosition().getY() + height - car.getHeight());
+//                    loadedCars.add(car);
+//                }
+//                //From top
+//                else if (Math.abs((carY + height - repairShopY)) < 5) {
+//                    repairShop.load(car);
+//                    car.setPosition(repairShop.getPosition().getX(), repairShop.getPosition().getY() + height - car.getHeight());
+//                    loadedCars.add(car);
+//                }
 
             }
         }
     }
 
-    private static boolean detectXCollision(double carX, double carY, int carWidth, int carHeight, double rX, double rY, int rWidth, int rHeight) {
-        return
-                //From left
-                (((Math.abs(carX + rWidth - rX) < 5) && (carY - rHeight - rY) < 5) ||
-                //From right
-                (Math.abs((carX - rX + rWidth)) < 5) && ((carY - rHeight -rY)<5) );
+    private static boolean detectObjectCollision(double carX, double carY, int carWidth, int carHeight, double rX, double rY, int rWidth, int rHeight) {
+        Rectangle r1 = new Rectangle((int) carX,(int) carY, carWidth, carHeight);
+        Rectangle r2 = new Rectangle((int) rX,(int) rY, rWidth, rHeight);
+        return r1.intersects(r2);
+//                //From left
+//                (((Math.abs(carX + rWidth - rX) < 5) && Math.abs(carY - rHeight - rY) < 5) && Math.abs()||
+//                //From right
+//                (Math.abs((carX - rX + rWidth)) < 5) && Math.abs((carY - rHeight -rY))<5);
     }
 }
 
