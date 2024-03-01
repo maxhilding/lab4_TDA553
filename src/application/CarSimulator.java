@@ -22,7 +22,6 @@ public class CarSimulator {
         CarView view = initViewForModel(model);
         CarFrame frame = initUIForView(view);
         CarController controller = new CarController(model, frame);
-
         try {
             while (true) {
                 Thread.sleep(10);
@@ -111,7 +110,7 @@ public class CarSimulator {
                 double repairShopX = repairShop.getPosition().getX();
                 double repairShopY = repairShop.getPosition().getY();
 
-                //TODO fix so that collisions take into account y-position aswell
+
                 if (detectObjectCollision(carX, carY, carWidth, carHeight, repairShopX, repairShopY, width, height)) {
                     repairShop.load(car);
                     //car.setPosition(repairShop.getPosition().getX(), repairShop.getPosition().getY()+ height - car.getHeight());
