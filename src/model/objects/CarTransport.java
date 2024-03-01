@@ -13,7 +13,7 @@ public class CarTransport implements ITruck, ILoadable<ICar>{
 
     private final int maxNumberOfLoadedCars;
 
-    public CarTransport(int maxLoad, String name, double x, double y) {
+    CarTransport(int maxLoad, String name, double x, double y) {
         wrappedCar = new BaseCar(2, 800, Color.green, name, x, y); //a specific type of car transport, like Saab95
         loadedCars = new Stack<>();
         maxNumberOfLoadedCars = maxLoad;

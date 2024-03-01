@@ -8,7 +8,7 @@ public class Volvo240 implements ICar {
 
     private final double trimFactor = 1.25;
 
-    public Volvo240(double x, double y) {
+    Volvo240(double x, double y) {
         wrappedCar = new BaseCar(4, 100, Color.black, "Volvo240", x, y);
 
     }
@@ -59,11 +59,13 @@ public class Volvo240 implements ICar {
     // Speed and acceleration
 
     public void incrementSpeed(double amount){
-        wrappedCar.speedFactor = Math.max(getEnginePower() * 0.01 * trimFactor,0);
+        wrappedCar.setSpeedFactor(Math.max(getEnginePower() * 0.01 * trimFactor,0));
         wrappedCar.incrementSpeed(amount);
     }
 
-    public void decrementSpeed(double amount){wrappedCar.decrementSpeed(amount);}
+    public void decrementSpeed(double amount){
+        wrappedCar.setSpeedFactor(Math.max(getEnginePower() * 0.01 * trimFactor,0));
+        wrappedCar.decrementSpeed(amount);}
 
     public void gas(double amount){
         if(amount>=0 && amount<= 1 && getCurrentSpeed() > 0 ){
@@ -74,7 +76,14 @@ public class Volvo240 implements ICar {
         }
     }
 
-    public void brake(double amount){wrappedCar.brake(amount);}
+    public void brake(double amount){
+        if(amount>=0 && amount<= 1){
+            decrementSpeed(amount);
+        }
+        else {
+            throw new IllegalArgumentException(amount + " not allowed as an argument");
+        }
+    }
 
     public double getCurrentSpeed(){return wrappedCar.getCurrentSpeed();}
 

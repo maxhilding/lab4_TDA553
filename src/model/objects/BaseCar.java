@@ -19,11 +19,11 @@ public class BaseCar implements ICar{
 
     private double currentDegree = 90;
 
-    public double speedFactor = 1;
+    private double speedFactor = 1;
 
     private boolean isDriveable = true;
 
-    public BaseCar(int nrDoors, double enginePower, Color color, String modelName, double x, double y) {
+    BaseCar(int nrDoors, double enginePower, Color color, String modelName, double x, double y) {
         this.nrDoors = nrDoors;
         this.enginePower = enginePower;
         this.color = color;
@@ -59,6 +59,10 @@ public class BaseCar implements ICar{
 
     public void setIsDriveable(){
         isDriveable = true;
+    }
+
+    public void setSpeedFactor(double newSpeedFactor){
+        speedFactor = newSpeedFactor;
     }
 
     public void startEngine(){

@@ -68,7 +68,7 @@ public class Model implements ModelUpdateListener{
     }
 
     public void turboOff(){
-        cars.turboOn();
+        cars.turboOff();
     }
 
     public void raiseBed(){
@@ -89,7 +89,7 @@ public class Model implements ModelUpdateListener{
     //chain of responsibility
     public void addACar() {
         if (cars.size() < 10){
-        ICar volvo = new Volvo240(0,100);
+        ICar volvo = Factory.createVolvo240(0,100);
         cars.addCar(volvo);
         actOnCarAdded(volvo); //right here
     }}

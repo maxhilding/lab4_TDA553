@@ -11,7 +11,7 @@ public class Scania implements ITruck{
 
     private double bedAngle;
 
-    public Scania(double x, double y) {
+    Scania(double x, double y) {
         wrappedCar = new BaseCar(2, 770, Color.red, "Scania", x, y);
         bedAngle = 0;
 
@@ -50,7 +50,6 @@ public class Scania implements ITruck{
 
 
     public void gas(double amount){
-        System.out.println(bedAngle);
         if (bedAngle == 0){
             wrappedCar.gas(amount);
         }

@@ -17,7 +17,7 @@ public class RepairShop<T extends ICar> implements IRepairShop, ILoadable<T>{
     private String type;
 
 
-    public RepairShop(int maxLoad, String repairShopName, double x, double y, String type) {
+    RepairShop(int maxLoad, String repairShopName, double x, double y, String type) {
         capacity = maxLoad;
         loadedCars = new Stack<>();
         this.repairShopName = repairShopName;

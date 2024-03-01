@@ -10,8 +10,7 @@ public class Saab95 implements ICar {
     private boolean turboOn;
 
 
-
-    public Saab95(double x, double y){
+    Saab95(double x, double y){
         wrappedCar = new BaseCar(2, 125, Color.red, "Saab95", x, y);
         turboOn = false;
 
@@ -31,7 +30,6 @@ public class Saab95 implements ICar {
     }
 
     public boolean getTurboOn() { return turboOn; }
-
 
 
     // General car methods
@@ -77,10 +75,14 @@ public class Saab95 implements ICar {
     public void incrementSpeed(double amount){
         double turbo = 1;
         if (turboOn) {turbo = 30;}
-        wrappedCar.speedFactor = Math.max(getEnginePower() * 0.01 * turbo,0);
+        wrappedCar.setSpeedFactor(Math.max(getEnginePower() * 0.01 * turbo,0));
         wrappedCar.incrementSpeed(amount);
     }
-    public void decrementSpeed(double amount){wrappedCar.decrementSpeed(amount);}
+    public void decrementSpeed(double amount){
+        double turbo = 1;
+        if (turboOn) {turbo = 30;}
+        wrappedCar.setSpeedFactor(Math.max(getEnginePower() * 0.01 * turbo,0));
+        wrappedCar.decrementSpeed(amount);}
 
     public void gas(double amount){
         if(amount>=0 && amount<= 1 && getCurrentSpeed() > 0 ){
@@ -90,7 +92,13 @@ public class Saab95 implements ICar {
             throw new IllegalArgumentException(amount + " not allowed as an argument");
     }}
 
-    public void brake(double amount){wrappedCar.brake(amount);}
+    public void brake(double amount) {
+        if (amount >= 0 && amount <= 1) {
+            decrementSpeed(amount);
+        } else {
+            throw new IllegalArgumentException(amount + " not allowed as an argument");
+        }
+    }
 
     public double getCurrentSpeed(){return wrappedCar.getCurrentSpeed();}
 
