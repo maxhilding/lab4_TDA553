@@ -2,15 +2,15 @@ package model;
 
 import model.objects.RepairShop;
 import java.util.*;
-import model.objects.ICar;
+import model.objects.Car;
 
-class RepairShopSet implements Iterable<RepairShop<ICar>>{
-    private final List<RepairShop<ICar>> repairShops = new ArrayList<>();
-    public void addRepairShop(RepairShop<ICar> r){
+public class RepairShopSet implements Iterable<RepairShop<Car>>{
+    private final List<RepairShop<Car>> repairShops = new ArrayList<>();
+    public void addRepairShop(RepairShop<Car> r){
         repairShops.add(r);
     }
     @Override
-    public Iterator<RepairShop<ICar>> iterator() {
+    public Iterator<RepairShop<Car>> iterator() {
         return repairShops.iterator();
     }
 }

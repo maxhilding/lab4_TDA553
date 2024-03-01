@@ -1,43 +1,42 @@
 package model;
-import model.objects.ICar;
 import model.objects.*;
 
 import java.util.*;
 
-class CarSet implements Iterable<ICar>{
-    private final List<ICar> cars = new ArrayList<>();
-    public void addCar(ICar c){
+public class CarSet implements Iterable<Car>{
+    private final List<Car> cars = new ArrayList<>();
+    public void addCar(Car c){
         cars.add(c);
     }
 
-    public void removeCar(ICar c){cars.remove(c);}
+    public void removeCar(Car c){cars.remove(c);}
 
     public void move(){
-        for (ICar car : cars) {
+        for (Car car : cars) {
             car.move();
         }
     };
 
     @Override
-    public Iterator<ICar> iterator() {
+    public Iterator<Car> iterator() {
         return cars.iterator();
     }
 
     // Controller calls these
     public void gas(double amount) {
-        for (ICar car : cars) {
+        for (Car car : cars) {
             car.gas(amount);
         }
     }
 
     public void brake(double amount){
-        for (ICar car : cars) {
+        for (Car car : cars) {
             car.brake(amount);
         }
     }
 
     public void turboOn(){
-        for (ICar car : cars) {
+        for (Car car : cars) {
             if(car instanceof Saab95){
                 ((Saab95) car).setTurboOn();
             }
@@ -45,7 +44,7 @@ class CarSet implements Iterable<ICar>{
     }
 
     public void turboOff(){
-        for (ICar car : cars) {
+        for (Car car : cars) {
             if(car instanceof Saab95){
                 ((Saab95) car).setTurboOff();
             }
@@ -53,7 +52,7 @@ class CarSet implements Iterable<ICar>{
     }
 
     public void raiseBed(){
-        for (ICar car : cars) {
+        for (Car car : cars) {
             if(car instanceof Scania){
                 ((Scania) car).raiseBed();
             }
@@ -61,19 +60,19 @@ class CarSet implements Iterable<ICar>{
     }
 
     public void lowerBed(){
-        for (ICar car : cars) {
+        for (Car car : cars) {
             if(car instanceof Scania){
                 ((Scania) car).lowerBed();
             }
         }
     }
     public void startAllCars() {
-        for (ICar car : cars) {
+        for (Car car : cars) {
             car.startEngine();
         }
     }
     public void stopAllCars() {
-        for (ICar car : cars) {
+        for (Car car : cars) {
             car.stopEngine();
         }
     }
@@ -82,9 +81,11 @@ class CarSet implements Iterable<ICar>{
         return cars.size();
     }
 
-    public ICar remove(int i){
-        ICar removedCar = cars.get(i);
+    public Car remove(int i){
+        Car removedCar = cars.get(i);
         cars.remove(i);
         return removedCar;
     }
+
+
 }

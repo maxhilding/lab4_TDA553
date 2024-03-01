@@ -1,19 +1,42 @@
 package model;
 
 import model.objects.*;
+import view.CarView;
+import view.DrawableCar;
+import view.DrawableRepairShop;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
-public class Model implements ModelUpdateListener{
+public class Model{
 
-    private final CarSet cars;
-    private final RepairShopSet repairShops;
+    public CarSet cars;
+    public static RepairShopSet repairShops;
+    
+    private int X = 2147483647;
+    
+    private int Y = 2147483647;
 
 
     public Model() {
         this.cars = new CarSet();
         this.repairShops = new RepairShopSet();
     }//constructor
+
+    public void setSize(int x, int y) {
+        X = x;
+        Y = y;
+    }
+    public void run(){
+        try {
+            while (true) {
+                Thread.sleep(10);
+                update();
+            }
+        } catch (InterruptedException e) {
+        }
+    }
 
     private final List<ModelUpdateListener> listeners = new ArrayList<>();
 
@@ -35,19 +58,19 @@ public class Model implements ModelUpdateListener{
         repairShops.addRepairShop(repairShop);
     }
 
-    public void addCar(ICar car){
+    public void addCar(Car car){
         cars.addCar(car);
     }
 
-    public void removeCar(ICar car){
+    public void removeCar(Car car){
         cars.removeCar(car);
     }
 
-    public Iterator<ICar> getCars(){
+    public Iterator<Car> getCars(){
         return cars.iterator();
     }
     
-    public Iterator<RepairShop<ICar>> getRepairShops(){
+    public Iterator<RepairShop<Car>> getRepairShops(){
         return repairShops.iterator();
     }
 
@@ -89,9 +112,8 @@ public class Model implements ModelUpdateListener{
     //chain of responsibility
     public void addACar() {
         if (cars.size() < 10){
-        ICar volvo = Factory.createVolvo240(0,100);
+        Car volvo = Factory.createVolvo240(0,100);
         cars.addCar(volvo);
-        actOnCarAdded(volvo); //right here
     }}
 
 
@@ -101,18 +123,71 @@ public class Model implements ModelUpdateListener{
         int low = 0;
         int high = cars.size();
         int result = r.nextInt(high-low) + low;
-        ICar removedCar = cars.remove(result);
-        actOnCarRemoved(removedCar);
+        Car removedCar = cars.remove(result);
     }
 
-    public void actOnCarAdded(ICar car){
-        for (ModelUpdateListener l : listeners)
-            l.actOnCarAdded(car);
+    private void update() {
+        move();
+        detectCollisions();
+        actOnModelUpdate();
     }
 
-    public void actOnCarRemoved(ICar car){
-        for (ModelUpdateListener l : listeners)
-            l.actOnCarRemoved(car);
+
+    private void detectCollisions() {
+        ArrayList<Car> loadedCars = new ArrayList<>();
+        for (Car car : cars) {
+            detectEdgeCollision(car);
+            detectRepairShopCollision(car, loadedCars);
+        }
+        for (Car lCar : loadedCars) {
+            cars.removeCar(lCar);
+        }
     }
 
+    private void detectEdgeCollision(Car car) {
+        int x = (int) Math.round(car.getPosition().getX());
+        int y = (int) Math.round(car.getPosition().getY());
+        if (x > this.X || x < 0) {
+            car.invertX();
+        }
+        if (y > this.Y|| y < 0) {
+            car.invertY();
+        }
+    }
+
+
+    private void detectRepairShopCollision(Car car, ArrayList<Car> loadedCars) {
+        for (RepairShop repairShop : repairShops) {
+            if ((Objects.equals(car.getModelName(), repairShop.getModelName()) || Objects.equals(repairShop.getModelName(), "Car")) && !repairShop.repairShopFull()) {
+
+                double carX = car.getPosition().getX();
+                double carY = car.getPosition().getY();
+                double repairShopX = repairShop.getPosition().getX();
+                double repairShopY = repairShop.getPosition().getY();
+
+                if (detectObjectCollision(carX, carY, repairShopX, repairShopY)) {
+                    repairShop.load(car);
+                    loadedCars.add(car);
+                }
+            }
+        }
+    }
+    public static boolean detectObjectCollision(double carX, double carY, double repairShopX, double repairShopY){
+        //If circles intersect
+        return circleIntersects((int)carX, (int)carY, (int)repairShopX, (int)repairShopY, 20, 20);
+    }
+    public static boolean circleIntersects(int x1, int y1, int x2, int y2,
+           int r1, int r2)
+    {
+        double d = Math.sqrt((x1 - x2) * (x1 - x2)
+                + (y1 - y2) * (y1 - y2));
+
+        if ((d <= r1 - r2) || (d <= r2 - r1) || (d < r1 + r2) || (d == r1 + r2)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
 }

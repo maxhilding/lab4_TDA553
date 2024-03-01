@@ -1,7 +1,6 @@
 package model.objects;
 
-public interface ILoadable<T extends ICar> {
+public interface Loadable<T> {
     T unload();
-
     void load(T t);
 }

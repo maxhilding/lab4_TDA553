@@ -2,8 +2,10 @@ package model.objects;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.Vector;
 
-public class BaseCar implements ICar{
+
+public abstract class Car implements Moveable {
 
     private final int nrDoors; // Number of doors on the car
     private final double enginePower; // Engine power of the car
@@ -19,11 +21,9 @@ public class BaseCar implements ICar{
 
     private double currentDegree = 90;
 
-    private double speedFactor = 1;
-
     private boolean isDriveable = true;
 
-    BaseCar(int nrDoors, double enginePower, Color color, String modelName, double x, double y) {
+    Car(double x, double y, int nrDoors, double enginePower, Color color, String modelName) {
         this.nrDoors = nrDoors;
         this.enginePower = enginePower;
         this.color = color;
@@ -32,6 +32,8 @@ public class BaseCar implements ICar{
         direction = new Point2D.Double(1, 0);
         stopEngine();
     }
+
+    void setPosition(double x, double y){this.position.setLocation(x, y);};
 
 
     public int getNrDoors(){
@@ -61,9 +63,7 @@ public class BaseCar implements ICar{
         isDriveable = true;
     }
 
-    public void setSpeedFactor(double newSpeedFactor){
-        speedFactor = newSpeedFactor;
-    }
+    public abstract double getSpeedFactor();
 
     public void startEngine(){
         if(isDriveable && currentSpeed==0) {
@@ -79,12 +79,20 @@ public class BaseCar implements ICar{
 
     public double getCurrentDegree(){return currentDegree;}
 
+    public void invertX(){
+        direction.setLocation(-direction.getX(), direction.getY());
+    }
+
+    public void invertY(){
+        direction.setLocation(direction.getX(), -direction.getY());
+    }
+
 
     public void incrementSpeed(double amount){
-        currentSpeed = Math.min(getCurrentSpeed() + speedFactor * amount,enginePower);
+        currentSpeed = Math.min(getCurrentSpeed() + getSpeedFactor() * amount,enginePower);
     }
     public void decrementSpeed(double amount){
-        currentSpeed = Math.max(getCurrentSpeed() - speedFactor * amount,0);
+        currentSpeed = Math.max(getCurrentSpeed() - getSpeedFactor() * amount,0);
     }
 
     public void gas(double amount){
@@ -113,20 +121,13 @@ public class BaseCar implements ICar{
         return new Point2D.Double(direction.getX(), direction.getY());
     }
 
-    public void setDirection(double newX, double newY) {
-        direction.setLocation(newX, newY);
-    }
-
-    public void setPosition(double newX, double newY){
-        position.setLocation(newX, newY);
-    }
 
 
     public void move(){
         if(currentSpeed > 0){
             double newX = currentSpeed * direction.getX() + position.getX();
             double newY = currentSpeed * direction.getY() + position.getY();
-            setPosition(newX, newY);}
+            position.setLocation(newX, newY);}
     }
     public void turnLeft(){
         currentDegree += handling;
@@ -140,6 +141,9 @@ public class BaseCar implements ICar{
     }
 
 
+
 }
+
+
 
 

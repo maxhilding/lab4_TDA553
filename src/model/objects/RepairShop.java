@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.Stack;
 
 
-public class RepairShop<T extends ICar> implements IRepairShop, ILoadable<T>{
+public class RepairShop<T extends Car> implements Loadable<T>{
 
     private final int capacity;
 
@@ -24,7 +24,6 @@ public class RepairShop<T extends ICar> implements IRepairShop, ILoadable<T>{
         this.position = new Point2D.Double(x, y);
         this.type = type;
     }
-
 
 
     public String getModelName(){
@@ -49,6 +48,7 @@ public class RepairShop<T extends ICar> implements IRepairShop, ILoadable<T>{
     public T unload() {
         T car = loadedCars.pop();
         car.stopEngine();
+        car.setIsUnDriveable();
         return car;
     }
 
@@ -67,4 +67,6 @@ public class RepairShop<T extends ICar> implements IRepairShop, ILoadable<T>{
     public boolean repairShopFull() {
         return loadedCars.size() >= capacity;
     }
+
 }
+

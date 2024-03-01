@@ -8,8 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CarFrame extends JFrame{
-    private static final int X = 800;
-    private static final int Y = 800;
+    private static int X = 800;
+    private static int Y = 800;
 
     JPanel controlPanel = new JPanel();
 
@@ -33,8 +33,6 @@ public class CarFrame extends JFrame{
     JButton addCarButton = new JButton("Add Car");
 
     JButton removeCarButton = new JButton("Remove Car");
-
-
 
     // Constructor
     public CarFrame(String framename){

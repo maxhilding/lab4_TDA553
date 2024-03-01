@@ -102,6 +102,5 @@ public class CarController {
                 model.removeACar();
             }
         });
-
         }
 }
