@@ -1,8 +1,8 @@
-package model.objects;
+package model;
 
 import java.awt.*;
 
-class Saab95 extends Car implements Turbo{
+class Saab95 extends Car implements Turbo {
 
     private boolean turboOn;
     

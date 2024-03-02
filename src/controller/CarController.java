@@ -1,5 +1,6 @@
 package controller;
 import model.Model;
+import model.ModelCallHandler;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -9,12 +10,12 @@ import java.awt.event.ActionListener;
 
 public class CarController {
 
-    private final Model model;
+    private final ModelCallHandler callHandler;
 
     private final CarFrame frame;
 
-    public CarController(Model model, CarFrame frame){
-        this.model = model;
+    public CarController(ModelCallHandler callHandler, CarFrame frame){
+        this.callHandler = callHandler;
         this.frame = frame;
         initInteraction();
 
@@ -33,7 +34,7 @@ public class CarController {
         frame.gasButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.gas(frame.gasAmount);
+                callHandler.gas(frame.gasAmount);
 
             }
         });
@@ -41,21 +42,21 @@ public class CarController {
         frame.brakeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.brake(frame.gasAmount);
+                callHandler.brake(frame.gasAmount);
             }
         });
 
         frame.turboOnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.turboOn();
+                callHandler.turboOn();
             }
         });
 
         frame.turboOffButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.turboOff();
+                callHandler.turboOff();
             }
         });
 
@@ -63,35 +64,35 @@ public class CarController {
         frame.liftBedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.raiseBed();
+                callHandler.raiseBed();
             }
         });
 
         frame.lowerBedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.lowerBed();
+                callHandler.lowerBed();
             }
         });
 
         frame.startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.startAllCars();
+                callHandler.startAllCars();
             }
         });
 
         frame.stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.stopAllCars();
+                callHandler.stopAllCars();
             }
         });
 
         frame.addCarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.addACar();
+                callHandler.addACar();
 
             }
         });
@@ -99,7 +100,7 @@ public class CarController {
         frame.removeCarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                model.removeACar();
+                callHandler.removeACar();
             }
         });
         }

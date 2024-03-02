@@ -1,18 +1,29 @@
 package model;
 
-import model.objects.*;
-
+import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.*;
+import java.util.List;
 
 class CarSet implements Iterable<Car>{
     private final List<Car> cars = new ArrayList<>();
-
 
     void addCar(Car c){
         cars.add(c);
     }
 
     void removeCar(Car c){cars.remove(c);}
+
+    void addSizes(Map<String, Point> sizes){
+        for(Car car: cars){
+            Point size = sizes.get(car.getModelName());
+            if(!(size==null)){
+                car.setHasDefinedSize(true);
+                car.setWidth((int) size.getX());
+                car.setLength((int) size.getY());
+            }
+        }
+    }
 
     void move(){
         for (Car car : cars) {

@@ -1,4 +1,4 @@
-package model.objects;
+package model;
 
 public interface Turbo {
     boolean getIsTurboOn();

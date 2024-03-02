@@ -1,8 +1,8 @@
-package model.objects;
+package model;
 
 import java.awt.*;
 import java.util.*;
-public class CarTransport extends Truck implements Loadable<Car> {
+class CarTransport extends Truck implements Loadable<Car> {
     private boolean bedIsUp = true;
     private Stack<Car> loadedCars;
     

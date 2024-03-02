@@ -18,16 +18,23 @@ public class CarView extends JPanel implements ModelUpdateListener {
         this.setBackground(Color.green);
     }
 
+    public boolean hasImages(){
+        return !(images == null);
+    }
+
     public void addImages(BufferedImages images) {
         this.images = images;
     }
-    
+
+    public BufferedImages getImages() {
+        return images;
+    }
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         for (Component c : getComponents()) {
             c.paint(g);
         }
-
     }
 
     @Override

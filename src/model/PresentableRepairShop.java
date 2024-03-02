@@ -1,8 +1,5 @@
 package model;
 
-import model.objects.Car;
-import model.objects.RepairShop;
-
 import java.awt.geom.Point2D;
 
 public class PresentableRepairShop implements Presentable{

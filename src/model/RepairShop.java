@@ -1,13 +1,13 @@
-package model.objects;
+package model;
 
-import model.objects.Car;
-import model.objects.Loadable;
+import model.Car;
+import model.Loadable;
 
 import java.awt.geom.Point2D;
 import java.util.Stack;
 
 
-public class RepairShop<T extends Car> implements Loadable<T> {
+class RepairShop<T extends Car> implements Loadable<T> {
 
     private final int capacity;
 
@@ -18,6 +18,12 @@ public class RepairShop<T extends Car> implements Loadable<T> {
     private Stack<T> loadedCars;
 
     private String type;
+
+    private double width = 0;
+
+    private double length = 0;
+
+    private boolean hasDefinedSize = false;
 
 
     RepairShop(int maxLoad, String repairShopName, double x, double y, String type) {
@@ -52,6 +58,31 @@ public class RepairShop<T extends Car> implements Loadable<T> {
 
     public boolean getIsRepairShopFull() {
         return loadedCars.size() >= capacity;
+    }
+
+    public double getWidth() {
+        return width;
+
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public boolean hasDefinedSize() {
+        return hasDefinedSize;
+    }
+
+    void setHasDefinedSize(boolean hasDefinedSize) {
+        this.hasDefinedSize = hasDefinedSize;
+    }
+
+    void setLength(int length) {
+        this.length = length;
+    }
+
+    void setWidth(int width) {
+        this.width = width;
     }
 
     @Override

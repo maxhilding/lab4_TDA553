@@ -1,4 +1,4 @@
-package model.objects;
+package model;
 
 public interface Loadable<T> {
     T unload();

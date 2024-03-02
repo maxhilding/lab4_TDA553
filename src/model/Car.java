@@ -1,9 +1,9 @@
-package model.objects;
+package model;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 
-public abstract class Car implements Moveable {
+abstract class Car implements Moveable {
 
     private final int nrDoors; // Number of doors on the car
     private final double enginePower; // Engine power of the car
@@ -15,6 +15,12 @@ public abstract class Car implements Moveable {
     private final double handling = 90; // To what degree the direction changes when turning
     private double currentDegree = 90; // The degree in the unit circle, i.e 90 degrees equals the unit vector (0,1)
     private boolean isDriveable = true; // Is the car in a driveable or undirveable mode
+
+    private int width = 0;
+
+    private int length = 0;
+
+    private boolean hasDefinedSize = false;
 
     Car(double x, double y, int nrDoors, double enginePower, Color color, String modelName) {
         this.nrDoors = nrDoors;
@@ -62,6 +68,31 @@ public abstract class Car implements Moveable {
     // Subclasses must implement own calculation for speedfactor
     protected abstract double getSpeedFactor();
 
+    public int getWidth() {
+        return width;
+
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public boolean hasDefinedSize() {
+        return hasDefinedSize;
+    }
+
+    void setHasDefinedSize(boolean hasDefinedSize) {
+        this.hasDefinedSize = hasDefinedSize;
+    }
+
+    void setLength(int length) {
+        this.length = length;
+    }
+
+    void setWidth(int width) {
+        this.width = width;
+    }
+
     //Setters
     void setPosition(double x, double y){this.position.setLocation(x, y);};
 
@@ -74,22 +105,22 @@ public abstract class Car implements Moveable {
     }
 
     // Can only start engine if mode isDriveable and engine not already on
-    public void startEngine(){
+    void startEngine(){
         if(isDriveable && currentSpeed==0) {
             currentSpeed = 0.1;
         }
     }
 
-    public void stopEngine(){
+    void stopEngine(){
         currentSpeed = 0;
     }
 
     // Inverts the direction the car is heading
-    public void invertX(){
+    void invertX(){
         direction.setLocation(-direction.getX(), direction.getY());
     }
 
-    public void invertY(){
+    void invertY(){
         direction.setLocation(direction.getX(), -direction.getY());
     }
 
@@ -102,7 +133,7 @@ public abstract class Car implements Moveable {
         currentSpeed = Math.max(currentSpeed - this.getSpeedFactor() * amount,0);
     }
 
-    public void gas(double amount){
+    void gas(double amount){
         if(amount>=0 && amount<= 1 && currentSpeed > 0 ){
             incrementSpeed(amount);
         }
@@ -111,7 +142,7 @@ public abstract class Car implements Moveable {
         }
     }
 
-    public void brake(double amount){
+    void brake(double amount){
         if(amount>=0 && amount<= 1){
             decrementSpeed(amount);
         }
@@ -140,7 +171,6 @@ public abstract class Car implements Moveable {
         direction.setLocation(Math.round(Math.cos(Math.toRadians(currentDegree))),
                 Math.round(Math.sin(Math.toRadians(currentDegree))));
     }
-
 
 
 }

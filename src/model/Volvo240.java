@@ -1,6 +1,6 @@
-package model.objects;
+package model;
 
-import model.objects.Car;
+import model.Car;
 
 import java.awt.*;
 
