@@ -1,11 +1,9 @@
 package model;
 
-import model.objects.*;
-import view.CarView;
-import view.DrawableCar;
-import view.DrawableRepairShop;
+import model.objects.Car;
+import model.objects.Factory;
+import model.objects.RepairShop;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -38,21 +36,22 @@ public class Model{
         }
     }
 
+    // Observer pattern
     private final List<ModelUpdateListener> listeners = new ArrayList<>();
 
     public void addListener(ModelUpdateListener l){
         listeners.add(l);
     }
 
-    public void actOnModelUpdate(){
+    public void notifyListeners(ArrayList<Presentable> presentables){
         for (ModelUpdateListener l : listeners)
-            l.actOnModelUpdate();
+            l.actOnModelUpdate(presentables);
     }
 
+    // Get called by controller
     public void move(){
         cars.move();
     }
-
 
     public void addRepairShop(RepairShop repairShop){
         repairShops.addRepairShop(repairShop);
@@ -66,13 +65,6 @@ public class Model{
         cars.removeCar(car);
     }
 
-    public Iterator<Car> getCars(){
-        return cars.iterator();
-    }
-    
-    public Iterator<RepairShop<Car>> getRepairShops(){
-        return repairShops.iterator();
-    }
 
     // Controller calls these
     public void gas(int amount) {
@@ -129,7 +121,8 @@ public class Model{
     private void update() {
         move();
         detectCollisions();
-        actOnModelUpdate();
+        ArrayList<Presentable> presentables = createPresentables();
+        notifyListeners(presentables);
     }
 
 
@@ -158,7 +151,7 @@ public class Model{
 
     private void detectRepairShopCollision(Car car, ArrayList<Car> loadedCars) {
         for (RepairShop repairShop : repairShops) {
-            if ((Objects.equals(car.getModelName(), repairShop.getModelName()) || Objects.equals(repairShop.getModelName(), "Car")) && !repairShop.repairShopFull()) {
+            if ((Objects.equals(car.getModelName(), repairShop.getModelName()) || Objects.equals(repairShop.getModelName(), "Car")) && !repairShop.getIsRepairShopFull()) {
 
                 double carX = car.getPosition().getX();
                 double carY = car.getPosition().getY();
@@ -189,5 +182,16 @@ public class Model{
             return false;
         }
 
+    }
+
+    public ArrayList<Presentable> createPresentables(){
+        ArrayList<Presentable> presentables = new ArrayList<>();
+        for(Car car: cars){
+            presentables.add(new PresentableCar(car));
+        }
+        for(RepairShop repairshop: repairShops){
+            presentables.add(new PresentableRepairShop(repairshop));
+        }
+        return presentables;
     }
 }

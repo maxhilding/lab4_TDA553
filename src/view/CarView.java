@@ -1,20 +1,16 @@
 package view;
 
-import model.Model;
-import model.ModelUpdateListener;
-import model.objects.*;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
-import model.*;
+
 
 
 public class CarView extends JPanel implements ModelUpdateListener {
     BufferedImages images;
 
-    private Model model; //johannes sa vi skulle göra såhär
     //Defensive copying later
     public CarView(int x, int y) {
         this.setDoubleBuffered(true);
@@ -22,11 +18,10 @@ public class CarView extends JPanel implements ModelUpdateListener {
         this.setBackground(Color.green);
     }
 
-    public void addModel(Model model, BufferedImages images) {
+    public void addImages(BufferedImages images) {
         this.images = images;
-        this.model = model;
     }
-
+    
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         for (Component c : getComponents()) {
@@ -36,26 +31,26 @@ public class CarView extends JPanel implements ModelUpdateListener {
     }
 
     @Override
-    public void actOnModelUpdate() {
+    public void actOnModelUpdate(ArrayList<Presentable> presentables) {
         removeAll();
-        for(Car car: model.cars){
-            if (car instanceof Volvo240) {
-                DrawableCar drawableCar = new DrawableCar(car, images.getVolvoImage());
-                add(drawableCar);
+        for(Presentable presentable: presentables){
+            if(presentable instanceof PresentableCar){
+                if (presentable.getModelName() == "Volvo240"){
+                    add(new Drawable(presentable.getPosition(), images.volvoImage));
+                }
+                else if (presentable.getModelName() == "Saab95"){
+                    add(new Drawable(presentable.getPosition(), images.saabImage));
+                }
+                else if (presentable.getModelName() == "Scania"){
+                    add(new Drawable(presentable.getPosition(), images.scaniaImage));
+                }
             }
-            else if (car instanceof Saab95){
-                DrawableCar drawableCar = new DrawableCar(car, images.getSaabImage());
-                add(drawableCar);
+            else if (presentable instanceof PresentableRepairShop){
+                add(new Drawable(presentable.getPosition(), images.volvoWorkshopImage));
             }
-            else if (car instanceof Scania){
-                DrawableCar drawableCar = new DrawableCar(car, images.getScaniaImage());
-                add(drawableCar);
-            }
-        }
-        for(RepairShop repairShop: model.repairShops){
-            add(new DrawableRepairShop(repairShop, images.getVolvoWorkshopImage()));
         }
         repaint();
+
     }
 
 }

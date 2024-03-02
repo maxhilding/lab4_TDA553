@@ -1,14 +1,17 @@
 package model.objects;
 
+import model.objects.Car;
+
 import java.awt.*;
 
-public abstract class Truck extends Car{
+public abstract class Truck extends Car {
 
     Truck(double x, double y, int nrDoors, int enginePower, Color color, String modelName){
         super(x, y, nrDoors, enginePower, color, modelName);
     }
 
-    public double getSpeedFactor(){
+    @Override
+    protected double getSpeedFactor(){
         return Math.max(getEnginePower() * 0.01,0);
     }
 

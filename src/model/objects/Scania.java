@@ -2,12 +2,12 @@ package model.objects;
 
 import java.awt.*;
 
-public class Scania extends Truck {
+class Scania extends Truck {
     private double bedAngle;
     private final double bedSensitivity = 10;
 
     Scania(double x, double y) {
-        super(x, y, 2, 770, Color.red, "ScaniaV8");
+        super(x, y, 2, 770, Color.red, "Scania");
         bedAngle = 0;
     }
 
@@ -18,14 +18,19 @@ public class Scania extends Truck {
     @Override
     public void raiseBed(){
         if (getCurrentSpeed() == 0){
-        bedAngle = Math.min(getBedAngle() + bedSensitivity, 70);
+        bedAngle = Math.min(bedAngle + bedSensitivity, 70);
+        stopEngine();
+        setIsUnDriveable();
         }
-
     }
     @Override
     public void lowerBed(){
         if(getCurrentSpeed()==0) {
-            bedAngle = Math.max(getBedAngle() - bedSensitivity,0);
+            bedAngle = Math.max(bedAngle - bedSensitivity,0);
+            if (bedAngle == 0) {
+                stopEngine();
+                setIsDriveable();
+            }
         }
     }
 

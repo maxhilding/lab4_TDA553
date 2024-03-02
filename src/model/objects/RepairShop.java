@@ -1,10 +1,13 @@
 package model.objects;
 
+import model.objects.Car;
+import model.objects.Loadable;
+
 import java.awt.geom.Point2D;
 import java.util.Stack;
 
 
-public class RepairShop<T extends Car> implements Loadable<T>{
+public class RepairShop<T extends Car> implements Loadable<T> {
 
     private final int capacity;
 
@@ -25,7 +28,6 @@ public class RepairShop<T extends Car> implements Loadable<T>{
         this.type = type;
     }
 
-
     public String getModelName(){
         return type;
     }
@@ -33,18 +35,26 @@ public class RepairShop<T extends Car> implements Loadable<T>{
     public Point2D.Double getPosition(){
         return new Point2D.Double(position.getX(), position.getY());
     }
-    public void setPosition(double newX, double newY){
-        position.setLocation(newX, newY);
-    }
+
+    @Override
     public int getCapacity() {
         return capacity;
+    }
+
+    @Override
+    public int getNumberOfLoaded() {
+        return loadedCars.size();
     }
 
     public String getRepairShopName() {
         return repairShopName;
     }
 
+    public boolean getIsRepairShopFull() {
+        return loadedCars.size() >= capacity;
+    }
 
+    @Override
     public T unload() {
         T car = loadedCars.pop();
         car.stopEngine();
@@ -52,6 +62,7 @@ public class RepairShop<T extends Car> implements Loadable<T>{
         return car;
     }
 
+    @Override
     public void load(T car) {
         if (loadedCars.size() < capacity) {
             loadedCars.push(car);
@@ -62,10 +73,6 @@ public class RepairShop<T extends Car> implements Loadable<T>{
             throw new RuntimeException("The repairshop is full"); //throwing 'wrong' exception here hehe
 
         }
-    }
-
-    public boolean repairShopFull() {
-        return loadedCars.size() >= capacity;
     }
 
 }

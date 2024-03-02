@@ -3,18 +3,10 @@ package application;
 import model.Model;
 import controller.CarFrame;
 import model.objects.Factory;
-import model.objects.Car;
 
 import view.BufferedImages;
 import view.CarView;
-import view.DrawableCar;
 import controller.*;
-import view.DrawableRepairShop;
-import model.objects.RepairShop;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class CarSimulator {
     public static void main(String[] args) {
@@ -42,8 +34,7 @@ public class CarSimulator {
 
     private static CarView initViewForModel(Model model, int x, int y) {
         CarView view = new CarView(x, y);
-        BufferedImages images = new BufferedImages();
-        view.addModel(model, images);
+        view.addImages(new BufferedImages());
         model.addListener(view);
         return view;
     }

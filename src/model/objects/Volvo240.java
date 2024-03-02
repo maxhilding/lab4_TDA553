@@ -1,8 +1,10 @@
 package model.objects;
 
+import model.objects.Car;
+
 import java.awt.*;
 
-public class Volvo240 extends Car{
+class Volvo240 extends Car {
 
     private final static double trimFactor = 1.25;
     
@@ -10,7 +12,7 @@ public class Volvo240 extends Car{
         super(x, y, 4, 100, Color.black, "Volvo240");
     }
     @Override
-    public double getSpeedFactor(){
+    protected double getSpeedFactor(){
         return Math.max(getEnginePower() * 0.01 * trimFactor,0);
     }
 

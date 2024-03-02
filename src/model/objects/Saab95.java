@@ -2,7 +2,7 @@ package model.objects;
 
 import java.awt.*;
 
-public class Saab95 extends Car{
+class Saab95 extends Car implements Turbo{
 
     private boolean turboOn;
     
@@ -11,21 +11,26 @@ public class Saab95 extends Car{
 	    turboOn = false;
     }
 
+    @Override
+    public boolean getIsTurboOn() { return turboOn; }
+
+    //Setters
+    @Override
     public void setTurboOn(){
 	    turboOn = true;
     }
 
+    @Override
     public void setTurboOff(){
 	    turboOn = false;
     }
 
-    public boolean getTurboOn() { return turboOn; }
 
     @Override
-    public double getSpeedFactor(){
+    protected double getSpeedFactor(){
         double turbo = 1;
         if(turboOn) turbo = 1.3;
-        return Math.max(getEnginePower() * 0.01 * turbo,0);
+        return Math.max(getEnginePower() * 0.01 * turbo, 0);
     }
 
 }

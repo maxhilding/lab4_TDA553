@@ -2,8 +2,6 @@ package model.objects;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.Vector;
-
 
 public abstract class Car implements Moveable {
 
@@ -12,16 +10,11 @@ public abstract class Car implements Moveable {
     private double currentSpeed; // The current speed of the car
     private Color color; // Color of the car
     private final String modelName; // The car model name
-
-    private Point2D.Double position;
-
-    private Point2D.Double direction;
-
-    private final double handling = 90;
-
-    private double currentDegree = 90;
-
-    private boolean isDriveable = true;
+    private Point2D.Double position; // The position in the world
+    private Point2D.Double direction; // Direction as
+    private final double handling = 90; // To what degree the direction changes when turning
+    private double currentDegree = 90; // The degree in the unit circle, i.e 90 degrees equals the unit vector (0,1)
+    private boolean isDriveable = true; // Is the car in a driveable or undirveable mode
 
     Car(double x, double y, int nrDoors, double enginePower, Color color, String modelName) {
         this.nrDoors = nrDoors;
@@ -33,9 +26,7 @@ public abstract class Car implements Moveable {
         stopEngine();
     }
 
-    void setPosition(double x, double y){this.position.setLocation(x, y);};
-
-
+    // Getters for the attributes
     public int getNrDoors(){
         return nrDoors;
     }
@@ -55,16 +46,34 @@ public abstract class Car implements Moveable {
 
     public boolean getIsDriveable(){return isDriveable;}
 
-    public void setIsUnDriveable(){
+    public double getHandling(){return handling;}
+
+    public double getCurrentDegree(){return currentDegree;}
+
+    //Defensive copying
+    public Point2D.Double getPosition(){
+        return new Point2D.Double(position.getX(), position.getY());
+    }
+
+    public Point2D.Double getDirection(){
+        return new Point2D.Double(direction.getX(), direction.getY());
+    }
+
+    // Subclasses must implement own calculation for speedfactor
+    protected abstract double getSpeedFactor();
+
+    //Setters
+    void setPosition(double x, double y){this.position.setLocation(x, y);};
+
+    void setIsUnDriveable(){
         isDriveable = false;
     }
 
-    public void setIsDriveable(){
+    void setIsDriveable(){
         isDriveable = true;
     }
 
-    public abstract double getSpeedFactor();
-
+    // Can only start engine if mode isDriveable and engine not already on
     public void startEngine(){
         if(isDriveable && currentSpeed==0) {
             currentSpeed = 0.1;
@@ -75,10 +84,7 @@ public abstract class Car implements Moveable {
         currentSpeed = 0;
     }
 
-    public double getHandling(){return handling;}
-
-    public double getCurrentDegree(){return currentDegree;}
-
+    // Inverts the direction the car is heading
     public void invertX(){
         direction.setLocation(-direction.getX(), direction.getY());
     }
@@ -88,11 +94,12 @@ public abstract class Car implements Moveable {
     }
 
 
-    public void incrementSpeed(double amount){
-        currentSpeed = Math.min(getCurrentSpeed() + getSpeedFactor() * amount,enginePower);
+    // Methods for changing speed and acceleration
+    private void incrementSpeed(double amount){
+        currentSpeed = Math.min(currentSpeed + this.getSpeedFactor() * amount,enginePower);
     }
-    public void decrementSpeed(double amount){
-        currentSpeed = Math.max(getCurrentSpeed() - getSpeedFactor() * amount,0);
+    private void decrementSpeed(double amount){
+        currentSpeed = Math.max(currentSpeed - this.getSpeedFactor() * amount,0);
     }
 
     public void gas(double amount){
@@ -113,27 +120,21 @@ public abstract class Car implements Moveable {
         }
     }
 
-    public Point2D.Double getPosition(){
-        return new Point2D.Double(position.getX(), position.getY());
-    }
-
-    public Point2D.Double getDirection(){
-        return new Point2D.Double(direction.getX(), direction.getY());
-    }
-
-
-
+    //Movement
+    @Override
     public void move(){
         if(currentSpeed > 0){
             double newX = currentSpeed * direction.getX() + position.getX();
             double newY = currentSpeed * direction.getY() + position.getY();
             position.setLocation(newX, newY);}
     }
+    @Override
     public void turnLeft(){
         currentDegree += handling;
         direction.setLocation(Math.round(Math.cos(Math.toRadians(currentDegree))),
                 Math.round(Math.sin(Math.toRadians(currentDegree))));
     }
+    @Override
     public void turnRight() {
         currentDegree -= handling;
         direction.setLocation(Math.round(Math.cos(Math.toRadians(currentDegree))),

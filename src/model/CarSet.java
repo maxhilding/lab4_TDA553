@@ -1,17 +1,20 @@
 package model;
+
 import model.objects.*;
 
 import java.util.*;
 
-public class CarSet implements Iterable<Car>{
+class CarSet implements Iterable<Car>{
     private final List<Car> cars = new ArrayList<>();
-    public void addCar(Car c){
+
+
+    void addCar(Car c){
         cars.add(c);
     }
 
-    public void removeCar(Car c){cars.remove(c);}
+    void removeCar(Car c){cars.remove(c);}
 
-    public void move(){
+    void move(){
         for (Car car : cars) {
             car.move();
         }
@@ -23,65 +26,65 @@ public class CarSet implements Iterable<Car>{
     }
 
     // Controller calls these
-    public void gas(double amount) {
+    void gas(double amount) {
         for (Car car : cars) {
             car.gas(amount);
         }
     }
 
-    public void brake(double amount){
+    void brake(double amount){
         for (Car car : cars) {
             car.brake(amount);
         }
     }
 
-    public void turboOn(){
+    void turboOn(){
         for (Car car : cars) {
-            if(car instanceof Saab95){
-                ((Saab95) car).setTurboOn();
+            if(car instanceof Turbo){
+                ((Turbo) car).setTurboOn();
             }
         }
     }
 
-    public void turboOff(){
+    void turboOff(){
         for (Car car : cars) {
-            if(car instanceof Saab95){
-                ((Saab95) car).setTurboOff();
+            if(car instanceof Turbo){
+                ((Turbo) car).setTurboOff();
             }
         }
     }
 
-    public void raiseBed(){
+    void raiseBed(){
         for (Car car : cars) {
-            if(car instanceof Scania){
-                ((Scania) car).raiseBed();
+            if(car instanceof Truck){
+                ((Truck) car).raiseBed();
             }
         }
     }
 
-    public void lowerBed(){
+    void lowerBed(){
         for (Car car : cars) {
-            if(car instanceof Scania){
-                ((Scania) car).lowerBed();
+            if(car instanceof Truck){
+                ((Truck) car).lowerBed();
             }
         }
     }
-    public void startAllCars() {
+    void startAllCars() {
         for (Car car : cars) {
             car.startEngine();
         }
     }
-    public void stopAllCars() {
+    void stopAllCars() {
         for (Car car : cars) {
             car.stopEngine();
         }
     }
 
-    public int size(){
+    int size(){
         return cars.size();
     }
 
-    public Car remove(int i){
+    Car remove(int i){
         Car removedCar = cars.get(i);
         cars.remove(i);
         return removedCar;
