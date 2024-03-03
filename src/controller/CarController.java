@@ -1,7 +1,6 @@
 package controller;
-import model.Model;
-import model.ModelCallHandler;
 
+import model.ModelCallHandler;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;

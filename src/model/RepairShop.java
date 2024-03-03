@@ -1,8 +1,5 @@
 package model;
 
-import model.Car;
-import model.Loadable;
-
 import java.awt.geom.Point2D;
 import java.util.Stack;
 

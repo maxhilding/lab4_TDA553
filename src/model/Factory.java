@@ -21,6 +21,14 @@ public class Factory {
     public static RepairShop<Volvo240> createVolvoRepairShop(int maxLoad, String repairShopName, double x, double y) {
         return new RepairShop<>(maxLoad, repairShopName, x, y, "Volvo240");
     }
+
+    public static RepairShop<Saab95> createSaabRepairShop(int maxLoad, String repairShopName, double x, double y) {
+        return new RepairShop<>(maxLoad, repairShopName, x, y, "Saab95");
+    }
+
+    public static RepairShop<Car> createGenericRepairShop(int maxLoad, String repairShopName, double x, double y){
+        return new RepairShop<>(maxLoad, repairShopName, x, y, "Car");
+    }
 }
 
 

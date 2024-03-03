@@ -1,8 +1,5 @@
 package model;
 
-import view.BufferedImages;
-
-import java.awt.geom.Point2D;
 import java.util.*;
 import java.awt.*;
 
@@ -180,7 +177,6 @@ public class Model{
 
                 if(car.hasDefinedSize() && repairshop.hasDefinedSize()){
                     if (detectObjectCollisionWithRectangles(carX, carY, car.getWidth(), car.getLength(), repairshopX, repairshopY, repairshop.getWidth(), repairshop.getLength())) {
-                        System.out.println("detecting collision with rectangles");
                         repairshop.load(car);
                         loadedCars.add(car);
                     }

@@ -1,11 +1,8 @@
 package controller;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 
 public class CarFrame extends JFrame{
     private static int X = 800;
@@ -39,17 +36,8 @@ public class CarFrame extends JFrame{
         initComponents(framename);
     }
 
-    public int getPanelXBorder(){
-        return X;
-    }
-
-    public int getPanelYBorder(){
-        return Y-240;
-    }
-
     // Sets everything in place and fits everything
     public void initComponents(String title) {
-
         this.setTitle(title);
         this.setPreferredSize(new Dimension(X, Y));
         this.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));

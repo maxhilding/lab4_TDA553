@@ -1,7 +1,5 @@
 package model;
 
-import model.Car;
-
 import java.awt.*;
 
 abstract class Truck extends Car {

@@ -4,9 +4,9 @@ import java.awt.geom.Point2D;
 
 public class PresentableRepairShop implements Presentable{
 
-    private RepairShop wrappedRepairShop;
+    private RepairShop<? extends Car> wrappedRepairShop;
 
-    PresentableRepairShop(RepairShop repairShop){
+    PresentableRepairShop(RepairShop<? extends Car> repairShop){
         this.wrappedRepairShop = repairShop;
     }
 
