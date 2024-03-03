@@ -7,7 +7,7 @@ class Scania extends Truck {
     private final double bedSensitivity = 10;
 
     Scania(double x, double y) {
-        super(x, y, 2, 770, Color.red, "Scania");
+        super(x, y, 2, 200, Color.red, "Scania");
         bedAngle = 0;
     }
 

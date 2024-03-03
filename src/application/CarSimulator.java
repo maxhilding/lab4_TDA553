@@ -35,9 +35,9 @@ public class CarSimulator {
         model.addCar(Factory.createVolvo240(0, 100));
         model.addCar(Factory.createSaab95(0, 300));
         model.addCar(Factory.createScania(0, 200));
-        model.addRepairShop(Factory.createVolvoRepairShop(4, "VolvoRepairShop", 300, 100));
-        model.addRepairShop(Factory.createSaabRepairShop(5, "VolvoRepairShop", 300, 300));
-        model.addRepairShop(Factory.createGenericRepairShop(5, "VolvoRepairShop", 300, 200));
+        model.addRepairShop(Factory.createVolvoRepairShop(4, "VolvoRepairShop", 500, 100));
+        model.addRepairShop(Factory.createSaabRepairShop(5, "VolvoRepairShop", 500, 300));
+        model.addRepairShop(Factory.createGenericRepairShop(5, "VolvoRepairShop", 500, 200));
         return model;
     }
 

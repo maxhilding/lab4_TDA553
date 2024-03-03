@@ -29,7 +29,7 @@ class Saab95 extends Car implements Turbo {
     @Override
     protected double getSpeedFactor(){
         double turbo = 1;
-        if(turboOn) turbo = 1.3;
+        if(turboOn) turbo = 13;
         return Math.max(getEnginePower() * 0.01 * turbo, 0);
     }
 
