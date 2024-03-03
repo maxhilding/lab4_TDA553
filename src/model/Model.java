@@ -181,14 +181,14 @@ public class Model{
 
                 if(car.hasDefinedSize() && repairshop.hasDefinedSize()){
                     if (detectObjectCollisionWithRectangles(carX, carY, car.getWidth(), car.getLength(), repairshopX, repairshopY, repairshop.getWidth(), repairshop.getLength())) {
-                        Model.<Car>loadInCar((RepairShop<? super Car>) repairshop, car);
+                        Model.loadInCar((RepairShop<? super Car>) repairshop, car);
                         //repairshop.load(car);
                         loadedCars.add(car);
                     }
                 }
                 else {
                     if (detectObjectCollisionWithCircles(carX, carY, repairshopX, repairshopY)) {
-                        Model.<Car>loadInCar((RepairShop<? super Car>) repairshop, car);
+                        Model.loadInCar((RepairShop<? super Car>) repairshop, car);
                         //repairshop.load(car);
                         loadedCars.add(car);
                     }
@@ -197,7 +197,7 @@ public class Model{
         }
     }
 
-    private static <T> void loadInCar(RepairShop<? super T> repairshop, T car){
+    private static void loadInCar(RepairShop<? super Car> repairshop, Car car){
         repairshop.load(car);
     }
 
