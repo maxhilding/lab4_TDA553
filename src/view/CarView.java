@@ -4,6 +4,7 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 
@@ -40,6 +41,12 @@ public class CarView extends JPanel implements ModelUpdateListener {
     @Override
     public void actOnModelUpdate(ArrayList<Presentable> presentables) {
         removeAll();
+        addDrawables(presentables);
+        repaint();
+
+    }
+
+    private void addDrawables(ArrayList<Presentable> presentables) {
         for(Presentable presentable: presentables){
             if(presentable instanceof PresentableCar){
                 if (presentable.getModelName() == "Volvo240"){
@@ -56,7 +63,6 @@ public class CarView extends JPanel implements ModelUpdateListener {
                 add(new Drawable(presentable.getPosition(), images.volvoWorkshopImage));
             }
         }
-        repaint();
 
     }
 

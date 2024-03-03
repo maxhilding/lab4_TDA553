@@ -56,13 +56,18 @@ public class CarSimulator {
     }
 
     private static void provideModelWithSizes(Model model, BufferedImages images){
+        Map<String, Point> sizes = getMapOfSizes(images);
+        model.addSizes(sizes);
+    }
+
+    private static Map<String, Point> getMapOfSizes(BufferedImages images) {
         Map<String, Point> sizes = new HashMap<>();
         // can make this more extensible in the future by looping through images and assigning their original filename as key
         sizes.put("Volvo240", new Point(images.getVolvoImage().getWidth(), images.getVolvoImage().getHeight()));
         sizes.put("Saab95", new Point(images.getSaabImage().getWidth(), images.getSaabImage().getHeight()));
         sizes.put("Scania", new Point(images.getScaniaImage().getWidth(), images.getScaniaImage().getHeight()));
         sizes.put("VolvoRepairShop", new Point(images.getVolvoWorkshopImage().getWidth(), images.getVolvoWorkshopImage().getHeight()));
-        model.addSizes(sizes);
+        return sizes;
     }
 
 }

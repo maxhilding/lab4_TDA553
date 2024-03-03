@@ -86,7 +86,7 @@ class RepairShop<T extends Car> implements Loadable<T> {
     public T unload() {
         T car = loadedCars.pop();
         car.stopEngine();
-        car.setIsUnDriveable();
+        car.setIsDriveable();
         return car;
     }
 

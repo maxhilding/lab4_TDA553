@@ -144,31 +144,35 @@ public class Model{
         int x = (int) Math.round(car.getPosition().getX());
         int y = (int) Math.round(car.getPosition().getY());
         if(car.hasDefinedSize()){
-            if ((x+car.getWidth()) > this.X || x < 0) {
-                car.invertX();
-            }
-            if ((y + car.getLength()) > this.Y|| y < 0) {
-                car.invertY();
-            }
+            detectEdgeCollisionWithRectangle(car, x, y);
         }
         else {
-            if (x > this.X || x < 0) {
-                car.invertX();
-            }
-            if (y > this.Y|| y < 0) {
-                car.invertY();
-            }
+            detecteEdgeCollisionWithTopLeft(car, x, y);
+        }
+    }
+
+    private void detectEdgeCollisionWithRectangle(Car car, int x, int y) {
+        if ((x + car.getWidth()) > this.X || x < 0) {
+            car.invertX();
+        }
+        if ((y + car.getLength()) > this.Y|| y < 0) {
+            car.invertY();
+        }
+    }
+
+    private void detecteEdgeCollisionWithTopLeft(Car car, int x, int y) {
+        if (x > this.X || x < 0) {
+            car.invertX();
+        }
+        if (y > this.Y|| y < 0) {
+            car.invertY();
         }
     }
 
 
-
-
     private void detectRepairShopCollision(Car car, ArrayList<Car> loadedCars) {
         for (RepairShop repairshop : repairShops) {
-            if ((Objects.equals(car.getModelName(), repairshop.getModelName())
-                    || Objects.equals(repairshop.getModelName(), "Car"))
-                    && !repairshop.getIsRepairShopFull()) {
+            if (isCorrectRepairshop(car, repairshop)) {
 
                 double carX = car.getPosition().getX();
                 double carY = car.getPosition().getY();
@@ -191,6 +195,12 @@ public class Model{
         }
     }
 
+    private static boolean isCorrectRepairshop(Car car, RepairShop repairshop) {
+        return (Objects.equals(car.getModelName(), repairshop.getModelName())
+                || Objects.equals(repairshop.getModelName(), "Car"))
+                && !repairshop.getIsRepairShopFull();
+    }
+
     private static boolean detectObjectCollisionWithRectangles(double carX, double carY, double carWidth, double carHeight, double rX, double rY, double rWidth, double rHeight) {
         Rectangle r1 = new Rectangle((int) carX, (int) carY, (int) carWidth, (int) carHeight);
         Rectangle r2 = new Rectangle((int) rX, (int) rY, (int) rWidth, (int) rHeight);
@@ -201,11 +211,8 @@ public class Model{
         //If circles intersect
         return circleIntersects((int)carX, (int)carY, (int)repairShopX, (int)repairShopY, 20, 20);
     }
-    private static boolean circleIntersects(int x1, int y1, int x2, int y2,
-           int r1, int r2)
-    {
-        double d = Math.sqrt((x1 - x2) * (x1 - x2)
-                + (y1 - y2) * (y1 - y2));
+    private static boolean circleIntersects(int x1, int y1, int x2, int y2, int r1, int r2) {
+        double d = Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 
         if ((d <= r1 - r2) || (d <= r2 - r1) || (d < r1 + r2) || (d == r1 + r2)) {
             return true;
