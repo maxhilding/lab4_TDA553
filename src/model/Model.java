@@ -171,7 +171,7 @@ public class Model{
 
 
     private void detectRepairShopCollision(Car car, ArrayList<Car> loadedCars) {
-        for (RepairShop repairshop : repairShops) {
+        for (RepairShop<? extends Car> repairshop : repairShops) {
             if (isCorrectRepairshop(car, repairshop)) {
 
                 double carX = car.getPosition().getX();
@@ -181,13 +181,15 @@ public class Model{
 
                 if(car.hasDefinedSize() && repairshop.hasDefinedSize()){
                     if (detectObjectCollisionWithRectangles(carX, carY, car.getWidth(), car.getLength(), repairshopX, repairshopY, repairshop.getWidth(), repairshop.getLength())) {
-                        repairshop.load(car);
+                        Model.<Car>loadInCar((RepairShop<? super Car>) repairshop, car);
+                        //repairshop.load(car);
                         loadedCars.add(car);
                     }
                 }
                 else {
                     if (detectObjectCollisionWithCircles(carX, carY, repairshopX, repairshopY)) {
-                        repairshop.load(car);
+                        Model.<Car>loadInCar((RepairShop<? super Car>) repairshop, car);
+                        //repairshop.load(car);
                         loadedCars.add(car);
                     }
                 }
@@ -195,7 +197,11 @@ public class Model{
         }
     }
 
-    private static boolean isCorrectRepairshop(Car car, RepairShop repairshop) {
+    private static <T> void loadInCar(RepairShop<? super T> repairshop, T car){
+        repairshop.load(car);
+    }
+
+    private static boolean isCorrectRepairshop(Car car, RepairShop<? extends Car> repairshop) {
         return (Objects.equals(car.getModelName(), repairshop.getModelName())
                 || Objects.equals(repairshop.getModelName(), "Car"))
                 && !repairshop.getIsRepairShopFull();

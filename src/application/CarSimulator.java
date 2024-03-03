@@ -36,8 +36,8 @@ public class CarSimulator {
         model.addCar(Factory.createSaab95(0, 300));
         model.addCar(Factory.createScania(0, 200));
         model.addRepairShop(Factory.createVolvoRepairShop(4, "VolvoRepairShop", 500, 100));
-        model.addRepairShop(Factory.createSaabRepairShop(5, "VolvoRepairShop", 500, 300));
-        model.addRepairShop(Factory.createGenericRepairShop(5, "VolvoRepairShop", 500, 200));
+        model.addRepairShop(Factory.createSaabRepairShop(5, "SaabRepairShop", 500, 200));
+        model.addRepairShop(Factory.createGenericRepairShop(5, "CarRepairShop", 500, 300));
         return model;
     }
 
@@ -67,7 +67,7 @@ public class CarSimulator {
         sizes.put("Saab95", new Point(images.getSaabImage().getWidth(), images.getSaabImage().getHeight()));
         sizes.put("Scania", new Point(images.getScaniaImage().getWidth(), images.getScaniaImage().getHeight()));
         sizes.put("VolvoRepairShop", new Point(images.getVolvoWorkshopImage().getWidth(), images.getVolvoWorkshopImage().getHeight()));
-        return sizes;
+        return sizes; 
     }
 
 }

@@ -22,6 +22,8 @@ abstract class Car implements Moveable {
 
     private boolean hasDefinedSize = false;
 
+    private boolean engineIsOn = false;
+
     Car(double x, double y, int nrDoors, double enginePower, Color color, String modelName) {
         this.nrDoors = nrDoors;
         this.enginePower = enginePower;
@@ -107,11 +109,13 @@ abstract class Car implements Moveable {
     // Can only start engine if mode isDriveable and engine not already on
     void startEngine(){
         if(isDriveable && currentSpeed==0) {
+            engineIsOn = true;
             currentSpeed = 0.1;
         }
     }
 
     void stopEngine(){
+        engineIsOn = false;
         currentSpeed = 0;
     }
 
@@ -134,8 +138,10 @@ abstract class Car implements Moveable {
     }
 
     void gas(double amount){
-        if(amount>=0 && amount<= 1 && currentSpeed > 0 ){
-            incrementSpeed(amount);
+        if(amount>=0 && amount<= 1){
+            if(engineIsOn){
+                incrementSpeed(amount);
+            }
         }
         else {
             throw new IllegalArgumentException(amount + " not allowed as an argument");

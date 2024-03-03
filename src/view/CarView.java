@@ -60,7 +60,15 @@ public class CarView extends JPanel implements ModelUpdateListener {
                 }
             }
             else if (presentable instanceof PresentableRepairShop){
-                add(new Drawable(presentable.getPosition(), images.volvoWorkshopImage));
+                if(presentable.getModelName() == "Volvo240"){
+                    add(new Drawable(presentable.getPosition(), images.volvoWorkshopImage));
+                }
+                else if (presentable.getModelName() == "Saab95"){
+                    add(new Drawable(presentable.getPosition(), images.volvoWorkshopImage));
+                }
+                else if (presentable.getModelName() == "Car"){
+                    add(new Drawable(presentable.getPosition(), images.volvoWorkshopImage));
+                }
             }
         }
 
