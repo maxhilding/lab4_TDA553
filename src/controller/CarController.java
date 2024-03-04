@@ -1,6 +1,6 @@
 package controller;
 
-import model.ModelCallHandler;
+import model.IModelCallHandler;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -9,11 +9,11 @@ import java.awt.event.ActionListener;
 
 public class CarController {
 
-    private final ModelCallHandler callHandler;
+    private final IModelCallHandler callHandler;
 
     private final CarFrame frame;
 
-    public CarController(ModelCallHandler callHandler, CarFrame frame){
+    public CarController(IModelCallHandler callHandler, CarFrame frame){
         this.callHandler = callHandler;
         this.frame = frame;
         initInteraction();

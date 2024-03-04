@@ -1,9 +1,9 @@
 package application;
 
+import model.IModelCallHandler;
 import model.Model;
 import controller.CarFrame;
 import model.Factory;
-import model.ModelCallHandler;
 import view.BufferedImages;
 import view.CarView;
 import controller.*;
@@ -24,8 +24,7 @@ public class CarSimulator {
             provideModelWithSizes(model,view.getImages());
         }
         CarFrame frame = initUIForView(view);
-        ModelCallHandler callHandler = new ModelCallHandler(model);
-        CarController controller = new CarController(callHandler, frame);
+        CarController controller = new CarController(model, frame);
         model.run();
     }
 

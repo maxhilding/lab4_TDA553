@@ -4,7 +4,7 @@ import java.util.*;
 import java.awt.*;
 
 
-public class Model{
+public class Model implements IModelCallHandler{
 
     private CarSet cars;
     private RepairShopSet repairShops;
@@ -67,48 +67,48 @@ public class Model{
 
 
     // Controller calls these
-    void gas(int amount) {
+    public void gas(int amount) {
         double gasAmount = ((double) amount) / 100;
         cars.gas(gasAmount);
     }
 
-    void brake(int amount){
+    public void brake(int amount){
         double brakeAmount = ((double) amount) / 100;
         cars.brake(brakeAmount);
     }
 
-    void turboOn(){
+    public void turboOn(){
         cars.turboOn();
     }
 
-    void turboOff(){
+    public void turboOff(){
         cars.turboOff();
     }
 
-    void raiseBed(){
+    public void raiseBed(){
         cars.raiseBed();
     }
 
-    void lowerBed(){
+    public void lowerBed(){
         cars.lowerBed();
     }
-    void startAllCars() {
+    public void startAllCars() {
         cars.startAllCars();
     }
 
-    void stopAllCars() {
+    public void stopAllCars() {
         cars.stopAllCars();
     }
 
 
-    void addACar() {
+    public void addACar() {
         if (cars.size() < 10){
         Car volvo = Factory.createVolvo240(0,100);
         cars.addCar(volvo);
         }
     }
 
-    void removeACar() {
+    public void removeACar() {
         Random r = new Random();
         int low = 0;
         int high = cars.size();
@@ -147,7 +147,7 @@ public class Model{
             detectEdgeCollisionWithRectangle(car, x, y);
         }
         else {
-            detecteEdgeCollisionWithTopLeft(car, x, y);
+            detectEdgeCollisionWithTopLeft(car, x, y);
         }
     }
 
@@ -160,7 +160,7 @@ public class Model{
         }
     }
 
-    private void detecteEdgeCollisionWithTopLeft(Car car, int x, int y) {
+    private void detectEdgeCollisionWithTopLeft(Car car, int x, int y) {
         if (x > this.X || x < 0) {
             car.invertX();
         }
@@ -171,7 +171,7 @@ public class Model{
 
 
     private void detectRepairShopCollision(Car car, ArrayList<Car> loadedCars) {
-        for (RepairShop<? extends Car> repairshop : repairShops) {
+        for (RepairShop<? extends Car > repairshop : repairShops) {
             if (isCorrectRepairshop(car, repairshop)) {
 
                 double carX = car.getPosition().getX();
