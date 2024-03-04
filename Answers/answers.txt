@@ -1,128 +1,59 @@
-Uppgift 2:
-Vilka beroenden är nödvändiga?
-Car har inga onödiga beroenden vad vi kan se.
-CarController borde inte:
-    - skapa en RepairShop för Volvo240
-TimerListener borde inte:
-    - ha usage dependency beroendet till Volvo för det är en kass och ogeneraliserbar lösning för att load bilar
-    - ha usage dependency till resterande bilar, eftersom de alla har samma storlek vad det verkar; hade dom inte haft det så hade det varit mer rimligt
-    - ha usage dependency till bufferedImage, eftersom det hade varit bättre att ha en metod i drawpanel som returnerar storleksinformationen
-        , sedan vidare kan det returneras från carview, tänk "don't speak to strangers"
-    - ha usage dependency till DrawPanel eftersom det är "ett carview objekt" emellan
-CarTransport borde inte ha:
-    - ha usage dependency till Double, utan borde finnas en getX(), getY() i Car till att börja med, dont speak to strangers
-CarView looks good...
-DrawPanel borde inte ha:
-    - beroende till Car, utan dess arraylist borde kunna innehålla alla "game objects" t.ex repairshop
-    - beroende till Volvo240 etc eftersom det hade varit bättre att ha en game object-klass som fungerar som en datastruktur med
-      dels en bil av specifik typ, dels dess picture. Då kan man bara skriva "g.drawImage" etc
-    - borde inte ha bufferedImage, utan borde vara att en setup-klass använder bufferedIma vid instansiering av game object-klassen,
-      och att game object då har attribut av typ bufferedimage
-    - borde inte heller ha en RepairShop och en Volvo240 av anledningarna listade ovan
-    - borde inte ha usage dependency till CarController (dess "cars" är en instans av carcontroller)
-RepairShop looks good...
-Saab95 looks good...
-Scania looks good...
-Truck looks good...
+Laboration 4: Designmönster och refactoring
 
-Vilka klasser är beroende av varandra som inte borde vara det?
-Utöver det vi lyft tidigare, så bör inte CarView ha en CarController, och egentligen knappast åt andra hållet heller.
-Nästan aldrig bra att ha beroenden åt bägge håll. Enligt Model-View-Controller så borde det finnas en
-mellanhand mellan CarView och CarController. Vår tanke är att man kan låta CarController lyssna efter input (buttons)
-via sin CarView, på så vis fokuserar man CarViews ansvar till att rita upp sig själv samtidigt som man
-tar bort associationen från CarView till CarController.
+Uppgift 1: Refaktorisera
+Gör de förändringar som ni identifierat i del 3, i enlighet med er refaktoreringsplan.
+
+Uppgift 2: Model-View-Controller
+Användargränssnittet ni utgick från i del 3 var en ansats till implementation av Model-View-Controller Pattern, men där gränsdragningen mellan model, view, controller och applikation inte var något vidare genomtänkt (för att inte säga usel).
+
+Vilka avvikelser från MVC-idealet kan ni identifiera i det ursprungliga användargränssnittet? Vad borde ha gjorts smartare, dummare eller tunnare?
+*View ska vara dum. Men i det ursprungliga så genomförde den beräkningar för förflyttning (ska vara i modellen) och tog input (ska vara i controller).
+*Controller ska vara tunn. I det ursprungliga var CarController snarare som en application och en model. Den intitierade simuleringen, hade loopen för simuleringen, genomförde beräkningar för spellogik och anropade delar av modellen efter input från viewen.
+*Egentligen borde CarController bara ta input och anropa modellen.
+*Angående modellen så borde den ha haft mer logik hos sig.
+
+Vilka av dessa brister åtgärdade ni med er nya design från del 3? Hur då?
+*Flyttade addActionListener till CarController från CarView
+*Införde ett cargameobject och repairshopgameobject klasser med privat parent som bara gav x, y och bilden. Detta gavs till CarView för att målas. Denna lösning blev bra i den benämning att inte blev beroende mellan CarView och Car. Dock blev det konstigt då modellens metoder skulle anropas eftersom vi inte hade en separat uppsättning med cars och repairshops, utan bara gameobjects.
+*Läsa in bilder förflyttades från drawpanel till CarController
+
+Vilka brister åtgärdade ni inte?
+*CarController är för bred. Behöver introducera en applikation som tar över mycket ansvar.
+*Utöka modellen eventuellt med collision detection och liknande.
+*Tydligare separation av MVC+applikation, modularisering.
+Rita ett nytt UML-diagram som beskriver en förbättrad design med avseende på MVC.
 
 
-Finns det starkare beroenden än nödvändigt?
-I många fall som vi redan berört så har klasser attribut (association/komposition) när det hade räckt
-med usage dependency.t.ex
 
 
-Kan ni identifiera några brott mot övriga designprinciper vi pratat om i kursen?
-Composition over inheritence. Överlag används extends ganska frikostigt, och även om det i vår mening inte är direkt
-fel att använda arv såsom vi gjort här, så hade det kunnat göras med komposition vilket är mer good practice.
-Ofta förekommer det usage dependency eller association med subtyper, t.ex RepairShop<Volvo240> osv där man
-istället borde ha beroenden till RepairShop & Car. Detta kan man säga bryter mot Dependency Inversion Principle,
-då man bör bero på abstraktioner snarare än på konkreta implementationer.
 
-Uppgift 3:
-Analysera era klasser med avseende på Separation of Concern (SoC) och Single Responsibility Principle (SRP).
-Vilka ansvarsområden har era klasser?
+Uppgift 3: Fler designmönster
+Observer, Factory Method, State, Composite. För vart och ett av dessa fyra designmönster, svara på följande frågor:
+Finns det något ställe i er design där ni redan använder detta pattern, avsiktligt eller oavsiktligt? Vilka designproblem löste ni genom att använda det?
+Finns det något ställe där ni kan förbättra er design genom att använda detta design pattern? Vilka designproblem skulle ni lösa genom att använda det? Om inte, varför skulle er design inte förbättras av att använda det?
 
-- CarController gör setup för spelet genom att initera instanser av fordon, verkstäder,
-samt en frame för UI och timer för spel-loopen.
+Observer
+*Enligt vår plan ska observer pattern används genom att modellen har en lista med listeners som meddelas att agera för varje tidsenhet i game-loopen eller vid andra uppdateringar i modellen. Fördelen med detta är att modellen kan användas med flera olika vyer och utan att modellen behöver känna till dem.
+Factory Method
+*Vi planerar att applikationen ska anropa en factory som skapar instanser vilket döljer implementeringen som till exempel vilka specifika klasser som faktiskt används. Vi kommer även att göra konstruktorer package-private för klasserna som är objekt i spelet för att uppnå detta.
+State
+*När det kommer till olika states för fordon har vi isDriveable i baseCar som exempelvis blir false när en bil lagras i en verkstad eller då en lastbil som har flaket uppe. Dock är det inget renodlat state pattern som används, eftersom vi inte använder ett interface för olika “sorters” drivable.
+Composite
+*Vi ska använda en CarSet och en RepairshopSet så att modellen kan anropa metoder på bilarna, respektive verkstäderna som ett enskilt objekt. Inuti dessa s.k set-klasser finns for-loopar som anropar metoder på de enskilda instanserna.
 
-- I den nestade klassen TimerListener inuti CarController sker i nuläget en updatering av bilarnas postition, collision
-detection (vilket inkluderar att hämta drawpanels storlek, spelobjektens bildstorlek och deras position, slutligen anropar
-den drawpanel att uppdatera sig.
+Uppdatera er design med de förbättringar ni identifierat.
+Uppgift 4: Refaktorisering igen
+Implementera slutligen de designförbättringar ni identifierat i alla tidigare uppgifter.
 
-- CarView skapar UI med paneler och knappar, samt har metoder som lyssnar efter input och därefter anropar carcontroller
-för att ge upphov till effekter i modellen
+Uppgift 5: Utöka användargränssnittet
+Implementera funktionalitet för att lägga till och ta bort bilar via GUI:t. Kan ni implementera detta utan att behöva förändra existerande klassfiler?
 
-- DrawPanel är panelen varpå spelobjekten ritas, Anvarsområden är att skapa sig själv, att läsa in bilder och vid anrop
-måla ut spelobjekten genom att anropa postionen hos spelobjektet och välja bild beroende på spelobjektets klass
+*Ja, det är möjligt. En klass som har tillgång till frame och model (samt dess CarSet) kan göra detta.
 
-- Car är en abstrakt klass som definerar ett gränssnitt för alla motorfordon med hjul. Detta inkluderar attribut som
-antal dörrar, färg, hästkrafter, hastighet, riktning, position mm, samt metoder för att gasa, bromsa, förflyttas och andra
-beteenden.
+Skapa knappar för "Add car" och "Remove car" med följande funktionalitet:
+"Add car" ska antingen generera en slumpmässig bil eller en given bil.
+"Remove car" ska ta bort någon bil - välj själva hur det avgörs vilken.
+Om inga bilar finns ska "Remove car" inte ha någon effekt, och om det finns 10 bilar ska "Add car" inte ha någon effekt. (OBS: Det måste inte vara just 10 som är gränsen, ni kan sätta en annan siffra om det gör det lättare med upplösningen.)
+Kan något designmönster vara relevant att använda för denna utökning?
 
-- Volvo240 är gränssnittet för bilar av modell Volv240. Den har hela gränssnittet från Car och tillför en trimfactor som innebär att den har en egen implementation för
-att beräkna faktorn som ökar/minskar hastigheten i samband med gas/broms
-
-- Saab95 är gränssnittet för bilar av modell Saab95. Den har hela gränssnittet från Car och tillför att den kan ha en turboeffekt av/på, som påverkar hastighetsfaktorn
-
-- Truck är en abstrakt klass med gränssnittet för lastbilar. Den har hela gränssnittet för Car, men även ett beteende i
-att kunna höja/sänka sitt flak.
-
-- Scania är gränssnittet för Scania lastbilar. Det är en truck men flaket har en vinkel.
-
-- CarTransport är gränssnittet för biltransporter. Det är en truck, men flaket kan bara vara uppe eller nere, samt
-kan lasta bilar (alltså subtyper av Car som dock inte är subtyper av Truck). Att den kan lasta bilar definerias
-även genom interfacet "Loadable" som den implementerar
-
-- Repairshop är gränssnittet för bilverkstäder. Den kan lasta bilar så implementerar "Loadable"
-
-Vilka anledningar har de att förändras?
-CarView både skapar UI och lyssnar efter input, men att lyssna efter input kan varit CarControllers uppgift istället.
-På så sätt behöver inte CarView känna till CarController.
-
-DrawPanel har för många ansvarsområden. Den behöver inte läsa in bilderna, den ska bara rita dem.
-Vidare borde den inte ha tillgång till de faktiska objekten som ritas utan endast bilden, x och y av den.
-Ett alternativ kan vara att ha en klass mellan drawpanel och car med endast dessa tre attribut.
-
-
-På vilka klasser skulle ni behöva tillämpa dekomposition för att bättre följa SoC och SRP?
-Funktionell nedbrytning i TimerListener.
-
-Uppgift 4: Refaktoriseringplan
-1. Göra en ArrayList med repairShops i CarController (tar bort has-a till Volvo240).
-2. Lägg till två attribut i carController panelXBorder, panelYBorder så att timerListener inte använder CarView
-3. Lägg till getXPosition(), getYPostition(), getXDirection(), getYDirection() i Car så klasser som anropar
- Car.getPostion(), Car.getDirection() inte har usage dependency till Point2D.Double
- 4. Istället för att addActionListener på buttons inuti CarView, kan det ske i CarController/TimerListener genom
- e.g cc.frame.startButton.addActionListener
-5. Lägg till en klass gameObject som ger x, y och BufferedImage till drawPanel. Den ska ha en privat parent av typ T
-som implementerar ett interface Positoned. Positioned ställer krav att objektet av typ T ska ha getters som ger x- och
-y-positioner. Setupen med intiering av instanser av gameObject sker i carController. Sedan finns MoveableGameObject som
-kan förlytta sig genom att dens parent object implementerar Moveable (alltså har implementation av move(), turnLeft(), turnRight())
-6. Funktionell nedbrytning med statiska hjälpmetoder för "collision detection" och
- "load on detection" i actionPerformed inom TimerListener
-
-Lab 4
- - Vilka avvikelser från MVC-idealet kan ni identifiera i det ursprungliga användargränssnittet? Vad borde ha gjorts smartare, dummare eller tunnare?
- View ska vara dum. Men i det ursprungliga så genomförde den beräkningar för förflyttning (ska vara i modellen) och tog input (ska vara i controller).
- Controller ska vara tunn. I det ursprungliga var CarController snarare som en application och en model. Den intitierade simuleringen,
- hade loopen för simuleringen, genomförde beräkningar för spellogik och anropade delar av modellen efter input från viewen.
- Egentligen borde CarController bara ta input och anropa modellen.
- Angående modellen så borde den ha haft mer logik hos sig.
-
-
- - Vilka av dessa brister åtgärdade ni med er nya design från del 2A? Hur då? Vilka brister åtgärdade ni inte?
- Åtgärder:
- * Vi föflyttade mottagande och hantering av input till controller så att view blev dummare.
- * Läsa in bilder förflyttades från drawpanel till CarController
-
- Brister som fortfarande behöver åtgärdas:
- * CarController är för bred. Behöver introducera en applikation som tar över mycket ansvar.
- * Utöka modellen eventuellt med collision detection och liknande.
- * Tydligare separation av MVC+applikation, modularisering.
+*Chain of responsibility.
